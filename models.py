@@ -86,27 +86,32 @@ class Recipe(db.Model):
     protein = db.Column(db.Integer, nullable=False)
     api_id = db.Column(db.Integer, nullable=False, unique=True) #api_id needs to be unique! keep out duplicates
     source_url = db.Column(db.Text, nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
     instructions = db.Column(db.Text, nullable=False)
+    time = db.Column(db.Text)
+    servings = db.Column(db.Text)
     
     def __repr__(self):
         return f"<Recipe #{self.id}: {self.title}, {self.img}, {self.protein}>"
 
     @classmethod
-    def addRecipe(cls, title, img, protien, api_id, source_url, instructions):
+    def addRecipe(cls, title, img, protein, api_id, source_url, ingredients, instructions, time, servings):
         """Adds a recipe to the db"""
 
         recipe = Recipe(
             title=title,
             img=img,
-            protien=protien,
+            protein=protein,
             api_id=api_id,
             source_url=source_url,
-            instructions=instructions
+            ingredients=ingredients,
+            instructions=instructions,
+            time=time,
+            servings=servings
         )
 
         db.session.add(recipe)
         return recipe
-
 
 
 
