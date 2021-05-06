@@ -91,6 +91,8 @@ class Recipe(db.Model):
     time = db.Column(db.Text)
     servings = db.Column(db.Text)
     
+
+    
     def __repr__(self):
         return f"<Recipe #{self.id}: {self.title}, {self.img}, {self.protein}>"
 

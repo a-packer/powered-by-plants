@@ -1,16 +1,17 @@
 import os
 
-from flask import Flask, render_template, request, jsonify, session, g
 import requests
 import json
 from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
-# TODO: add user signup and login forms
-# from forms import UserAddForm, LoginForm
+
+from forms import UserAddForm, LoginForm
 from models import db, connect_db, User, Recipe, Favorite
 from recipe import add_structure_recipe
+
+CURR_USER_KEY = "curr_user"
 
 
 app = Flask(__name__)
@@ -169,20 +170,20 @@ def signup():
                 last_name=form.last_name.data,
                 username=form.username.data,
                 email=form.email.data,
-                password=form.password.data,
+                password=form.password.data
             )
             db.session.commit()
 
         except IntegrityError:
             flash("Username already taken", 'danger')
-            return render_template('users/signup.html', form=form)
+            return render_template('signup.html', form=form)
 
         do_login(user)
 
         return redirect("/")
 
     else:
-        return render_template('users/signup.html', form=form)
+        return render_template('signup.html', form=form)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -202,7 +203,7 @@ def login():
 
         flash("Invalid credentials.", 'danger')
 
-    return render_template('users/login.html', form=form)
+    return render_template('login.html', form=form)
 
 
 @app.route('/logout')
@@ -218,138 +219,21 @@ def logout():
 ##############################################################################
 # General user routes:
 
-@app.route('/users')
-def list_users():
-    """Page with listing of users.
-
-    Can take a 'q' param in querystring to search by that username.
-    """
-
-    search = request.args.get('q')
-
-    if not search:
-        users = User.query.all()
-    else:
-        users = User.query.filter(User.username.like(f"%{search}%")).all()
-
-    return render_template('users/index.html', users=users)
-
 
 @app.route('/users/<int:user_id>')
 def users_show(user_id):
-    """Show user profile."""
+    """Show user profile and favorite recipes"""
 
     user = User.query.get_or_404(user_id)
 
-    # snagging messages in order from the database;
-    # user.messages won't be in order by default
-    messages = (Message
-                .query
-                .filter(Message.user_id == user_id)
-                .order_by(Message.timestamp.desc())
-                .limit(100)
-                .all())
-    return render_template('users/show.html', user=user, messages=messages)
-
-
-@app.route('/users/<int:user_id>/following')
-def show_following(user_id):
-    """Show list of people this user is following."""
-
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    user = User.query.get_or_404(user_id)
-    return render_template('users/following.html', user=user)
-
-
-@app.route('/users/<int:user_id>/followers')
-def users_followers(user_id):
-    """Show list of followers of this user."""
-
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    user = User.query.get_or_404(user_id)
-    return render_template('users/followers.html', user=user)
-
-
-@app.route('/users/follow/<int:follow_id>', methods=['POST'])
-def add_follow(follow_id):
-    """Add a follow for the currently-logged-in user."""
-
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    followed_user = User.query.get_or_404(follow_id)
-    g.user.following.append(followed_user)
-    db.session.commit()
-
-    return redirect(f"/users/{g.user.id}/following")
-
-
-@app.route('/users/stop-following/<int:follow_id>', methods=['POST'])
-def stop_following(follow_id):
-    """Have currently-logged-in-user stop following this user."""
-
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    followed_user = User.query.get(follow_id)
-    g.user.following.remove(followed_user)
-    db.session.commit()
-
-    return redirect(f"/users/{g.user.id}/following")
-
-
-@app.route('/users/profile', methods=["GET", "POST"])
-def profile():
-    """Update profile for current user."""
-
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
-    user = g.user
-
-    form = UserAddForm(obj=user)
-
-    if form.validate_on_submit():
-        try:
-            user.username=form.username.data
-
-
-            user.email=form.email.data,
-            user.image_url=form.image_url.data 
-
-            user = User.authenticate(form.username.data,
-                                    form.password.data)
-
-            if user:
-                db.session.commit()
-                
-                do_login(user)
-                flash(f"Hello, {user.username}!", "success")
-                return render_template('users/detail.html', user=user)
-
-            flash("Invalid credentials.", 'danger')
-            return redirect("/")
-            
-
-        except IntegrityError:
-            flash("Username already taken", 'danger')
-            return redirect("/")
-       
-        return render_template('users/profile.html', form=form)
-
-    else:
-        return render_template('users/edit.html', form=form)
-    
-
+    # TODO: get favorites
+    # favorites = (Favorite
+    #             .query
+    #             .filter(Favorite.user_id == user_id)
+    #             .limit(10)
+    #             .all())
+    # TODO: make user.html template
+    return render_template('user.html', user=user, favorites=favorites)
     
 
 @app.route('/users/delete', methods=["POST"])
@@ -368,26 +252,30 @@ def delete_user():
     return redirect("/signup")
 
 
-@app.route('/users/add_like/<int:message_id>', methods=["GET", "POST"])
-def add_like(message_id):
-    """Add a 'like' to a message"""
+@app.route('/users/add_fav/<int:recipe_id>', methods=["GET", "POST"])
+def add_like(recipe_id):
+    """Add favorite recipe"""
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/")
 
     user = User.query.get_or_404(g.user.id)
-    message = Message.query.get_or_404(message_id)
+    recipe = Recipe.query.get_or_404(message_id)
 
-    # check to see if message in liked messages already. If not, add to likes
-    liked_messages = user.likes
-    likes = [liked_message.id for liked_message in liked_messages]
-    if message.id in likes:
-        likes.remove(message.id)
-        user.likes = [Message.query.get(like_id) for like_id in likes]
-        db.session.commit()
-        return redirect('/')
-    else:
-        user.likes.append(message)
-        db.session.commit()
-        return redirect('/')
+    return redirect('/')
+
+
+    # check to see if recipe in favorites already. If not, add to favorites
+    # favorite_recipes = user.recipes
+    # favorites = [favorite_recipe.id for favorite_recipe in favorite_recipes]
+    # if recipe.id in likes:
+    #     likes.remove(recipe.id)
+    #     user.likes = [Message.query.get(like_id) for like_id in likes]
+    #     db.session.commit()
+        # return redirect('/')
+   
+    # else:
+    #     # user.likes.append(message)
+    #     # db.session.commit()
+    #     return redirect('/')
