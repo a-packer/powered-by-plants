@@ -6,6 +6,9 @@
 
 
 <h1>{{recipe.title}}</h1>
+<form method="POST" action="/users/add_fav/{{ recipe.id }}">
+    <button class="btn btn-outline-primary btn-sm">Add to Favorites</button>
+  </form>
 <img src="https://images.pexels.com/photos/1095550/pexels-photo-1095550.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="yum yum food description" width="500">
 <h4>Ready in {{recipe.time}} minutes</h4>
 <h4>Serves {{recipe.servings}}</h4>

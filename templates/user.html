@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>Your Recipes</h1>
+<div id="favorites">
+    {% for recipe in favorites%}
+    <div>recipe.title</div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

@@ -1,4 +1,5 @@
 import json
+from models import db, Recipe
 
 def add_structure_recipe(res):
     """takes response from API request and structures the return recipe info for db, returns recipe object"""
@@ -6,7 +7,7 @@ def add_structure_recipe(res):
     response_string = res.text # get text from response
     response_dict = json.loads(response_string) #convert to json dict
 
-    import pdb; pdb.set_trace() 
+    # import pdb; pdb.set_trace() 
     title = response_dict["title"]
     img = response_dict["image"]
     protein = response_dict["nutrition"]["nutrients"][9]["amount"]

@@ -256,26 +256,26 @@ def delete_user():
 def add_like(recipe_id):
     """Add favorite recipe"""
 
-    if not g.user:
-        flash("Access unauthorized.", "danger")
-        return redirect("/")
-
     user = User.query.get_or_404(g.user.id)
-    recipe = Recipe.query.get_or_404(message_id)
+    recipe = Recipe.query.get_or_404(recipe_id)
+    
+    # check to see if recipe in liked favorite recipes already. If not, add to recipes
+    fav_recipes = user.recipes
 
-    return redirect('/')
-
-
-    # check to see if recipe in favorites already. If not, add to favorites
-    # favorite_recipes = user.recipes
-    # favorites = [favorite_recipe.id for favorite_recipe in favorite_recipes]
-    # if recipe.id in likes:
-    #     likes.remove(recipe.id)
-    #     user.likes = [Message.query.get(like_id) for like_id in likes]
-    #     db.session.commit()
+    # import pdb; pdb.set_trace()
+   
+    fav_recipe_ids = [fav_recipe.id for fav_recipe in fav_recipes]
+    if recipe.id in fav_recipe_ids:
+        fav_recipe_ids.remove(recipe.id)
+        user.recipes = [Recipe.query.get(recipe_id) for recipe_id in fav_recipe_ids]
+        db.session.commit()
+        return (f"recipe {recipe.title} removed from {user.first_name}'s favorites")
+        # return redirect('/')
+    else:
+        user.recipes.append(Favorite(user_id=user.id, recipe_id=recipe_id)) 
+        db.session.commit()
+        return (f"recipe {recipe.title} added to {user.first_name}'s favorites")
         # return redirect('/')
    
-    # else:
-    #     # user.likes.append(message)
-    #     # db.session.commit()
-    #     return redirect('/')
+   
+
