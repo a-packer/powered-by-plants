@@ -2,7 +2,7 @@ import os
 
 import requests
 import json
-from flask import Flask, render_template, request, flash, redirect, session, g
+from flask import Flask, jsonify, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
 
@@ -43,61 +43,43 @@ def experiment_landing_page():
 def lucky_num_api():
     """gets recipe from spoonacular"""
 
-    query = request.args.get("query")
+    query = request.args.get("query") 
     key = "67de1636f65f4322adffda4851c70b9d"
+    min_protein = request.args.get("minProtein")
     intolerances = request.args.get("intolerances")
-    # Todo: get user input for recipe search: minProtien and intolerances
 
+    # import pdb; pdb.set_trace() 
 
-    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={key}&minProtein=15&intolerances={intolerances}&number=3&diet=vegan&query={query}&addRecipeInformation=True") 
+    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={key}&minProtein={min_protein}&intolerances=gluten&number=3&diet=vegan&query={query}&addRecipeInformation=True") 
     response_string = res.text
     response_dict = json.loads(response_string) #convert to json dict
 
+    # import pdb; pdb.set_trace() 
 
     results = response_dict['results'] #get results as list
+ 
 
-    recipe = results[0]  #gets results for first recipe from search query(current limit 3 recipes) then parses through response to get to protien amount
-    nutrition = recipe["nutrition"]  
-    nutrients = nutrition["nutrients"]
-    protein = nutrients[0]
-    amount = protein["amount"]
+    if results: #if there is at least one recipe returned
+        recipe = results[0]  #gets results for first recipe from search query(current limit 3 recipes) then parses through response to get to protien amount
+        nutrition = recipe["nutrition"]  
+        nutrients = nutrition["nutrients"]
+        protein = nutrients[0]
+        amount = protein["amount"]  
 
-    return jsonify(response_dict)  
+
+        return jsonify(response_dict) 
+    
+    else:
+        return jsonify({'results': [{'error' : 'none'}]})
+
+   
 
 
 @app.route("/recipe/<int:recipe_id>", methods=["POST"])
 def add_recipe(recipe_id):
     """Adds recipe to db"""
 
-    res = requests.get(f"https://api.spoonacular.com/recipes/324694/information?includeNutrition=True&apiKey=67de1636f65f4322adffda4851c70b9d")
-    # response_string = res.text # get text from response
-    # response_dict = json.loads(response_string) #convert to json dict
-    # title = response_dict["title"]
-    # img = response_dict["image"]
-    # protein = response_dict["nutrition"]["nutrients"][9]["amount"]
-    # api_id = response_dict["id"]
-    # source_url = response_dict["sourceUrl"]
-    # ingredient_info = response_dict["extendedIngredients"] # list of ingredients with all the info
-    # ingredients = [] 
-    # for ing in ingredient_info:            # make a list with just the amount, unit, name
-    #     ingredients.append([ing["amount"], ing["unit"], ing["name"]])
-    # instructions = response_dict["analyzedInstructions"][0]["steps"]
-    # time = response_dict["readyInMinutes"]
-    # servings= response_dict["servings"]
-
-    # recipe = Recipe.addRecipe(
-    #     title=title,
-    #     img=img,
-    #     protein=protein,
-    #     api_id=api_id,
-    #     source_url=source_url,
-    #     ingredients=json.dumps(ingredients), #converts to json
-    #     instructions=json.dumps(instructions), #converts to json
-    #     time=time,
-    #     servings=servings
-    # )
-
-    # db.session.commit()
+    res = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?includeNutrition=True&apiKey=67de1636f65f4322adffda4851c70b9d")
 
     # import pdb; pdb.set_trace() 
     recipe = add_structure_recipe(res) #adds recipe to db, then returns relevant and structured recipe information
@@ -269,13 +251,13 @@ def add_like(recipe_id):
         fav_recipe_ids.remove(recipe.id)
         user.recipes = [Recipe.query.get(recipe_id) for recipe_id in fav_recipe_ids]
         db.session.commit()
-        return (f"recipe {recipe.title} removed from {user.first_name}'s favorites")
-        # return redirect('/')
+        # return (f"recipe {recipe.title} removed from {user.first_name}'s favorites")
+        return redirect('/recipe/<int:recipe_id>')
     else:
         user.recipes.append(Favorite(user_id=user.id, recipe_id=recipe_id)) 
         db.session.commit()
-        return (f"recipe {recipe.title} added to {user.first_name}'s favorites")
-        # return redirect('/')
+        # return (f"recipe {recipe.title} added to {user.first_name}'s favorites")
+        return redirect('/recipe/<int:recipe_id>')
    
    
 

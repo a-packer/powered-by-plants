@@ -18,17 +18,3 @@ sandra = User(first_name='Sandra', last_name="Dee", email="sdee@email.com", user
 db.session.add_all([ann, donald, marco, sandra])
 db.session.commit()
 
-# Add sample recipes
-# quinoa = Recipe(title="Quinoa Salad", img="quinoa.jpg", protein=15)
-# pbj = Recipe(title="Peanut Butter and Jelly Sandwich", protein= 10)
-# kidneybean = Recipe(title="Kidney Bean Salad", img="www.beansalad.jpg", protein=25)
-# coffee = Recipe(title="Coffee Protein Shake", img="www.coffe.jpg", protein=12)
-# tempeh = Recipe(title="Tempeh Tacos", img="www.taco.jpg", protein=24)
-# quinoasoup = Recipe(title="Quinoa Mexi Soup", img="www.soup.jpg", protein=30)
-# tofu = Recipe(title="Tofu Wraps", img="www.tofu.jpg", protein=22)
-
-
-# db.session.add_all([quinoa, pbj, kidneybean, coffee, tempeh, quinoasoup, tofu])
-# db.session.commit()
-
-

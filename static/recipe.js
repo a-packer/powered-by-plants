@@ -7,38 +7,62 @@ function showRecipes(evt) {
 
         $("#search-results").empty()  // clear previous search results
 
+        console.log(results)
 
-        for (recipe of results) {
-            title = recipe.title
-            id = recipe.id
-            protein = Math.floor(recipe.nutrition.nutrients[0].amount)
-            time = recipe.readyInMinutes
-            servings = recipe.servings
 
-            newRecipe = document.createElement("div")
-            title_header = document.createElement("h3")
-            title_header.innerText = title
-            protein_p = document.createElement("p")
-            protein_p.innerText = `Protien: ${protein} //  Prep Time: ${time}  //  Serves: ${servings}`
+        if (!results.error) {
+            for (recipe of results) {
 
-            newRecipe.append(title_header, protein_p)
-
+                title = recipe.title
+                id = recipe.id
+                protein = Math.floor(recipe.nutrition.nutrients[0].amount)
+                time = recipe.readyInMinutes
+                servings = recipe.servings
     
-            $("#search-results").append(newRecipe)
+                newRecipe = document.createElement("div")
+                link = document.createElement("a")
+                title_header = document.createElement("h3")
+                link.append(title_header)
+                link.href = `/recipe/${id}`
+                title_header.innerText = title
+                recipe_details = document.createElement("p")
+                recipe_details.innerText = `Protien: ${protein} //  Prep Time: ${time}  //  Serves: ${servings}`
+    
+                newRecipe.append(title_header, recipe_details)
+    
+        
+                $("#search-results").append(newRecipe)
+            }
         }
+        else {
+            newRecipe = document.createElement("div")
+            error = document.createElement("p")
+            error.innerText = "Sorry, try a different search key"
+        }
+        
     }
  
     async function get_recipe() {
         // get user search input 
         query = $("#search-query").val()
-        // Todo: check values of check boxes for intolerances. Create minProtein selector range or something
-        intolerances = "gluten"
+      
+        gluten_free = $("#gluten_free").prop("checked")
         
-        params =  {"query": query,  "intolerances" : intolerances, "minProtein" : 10 , "number" : 2, "diet" : "vegan"}
+        intolerances = ""
+        if (gluten_free) {
+            intolerances = 'gluten'
+        }
+
+        protein = $("#protein_scale").val()
+        
+        params =  {"query": query, intolerances : intolerances, "minProtein" : protein , "number" : 1, "diet" : "vegan"}
+        console.log(params)
 
         // get recipe from spoonacular using the complexSearch endpoint
         res = await axios.get("http://127.0.0.1:5000/api/get-recipe", {params: params})  
+   
         results = res.data.results // recipe results JSON
+        console.log(results)
      
         show_recipe(results)
     }
@@ -46,6 +70,17 @@ function showRecipes(evt) {
 
 }
 
+
+// ------------Protein amount slider -------------------
+var slider = document.getElementById("protein_scale");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+// -------------------------------
 
 
 function Login() {   
@@ -59,6 +94,10 @@ function Signout() {
 
 
 $("#search").on("click", showRecipes);
+
+
+
+
 
 
 
