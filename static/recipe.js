@@ -4,23 +4,23 @@ function showRecipes(evt) {
     evt.preventDefault();
 
     function show_recipe(results) {
-
+ 
         $("#search-results").empty()  // clear previous search results
 
         console.log(results)
-
 
         if (!results.error) {
             for (recipe of results) {
 
                 title = recipe.title
-                id = recipe.id
+                id = recipe.id 
                 protein = Math.floor(recipe.nutrition.nutrients[0].amount)
                 time = recipe.readyInMinutes
                 servings = recipe.servings
     
                 newRecipe = document.createElement("div")
-                link = document.createElement("a")
+                link = document.createElement("button")
+                link.innerHTML = `<a href="http://127.0.0.1:5000/recipe/${recipe.id}">See Recipe</a>`
                 title_header = document.createElement("h3")
                 link.append(title_header)
                 link.href = `/recipe/${id}`
@@ -28,7 +28,7 @@ function showRecipes(evt) {
                 recipe_details = document.createElement("p")
                 recipe_details.innerText = `Protien: ${protein} //  Prep Time: ${time}  //  Serves: ${servings}`
     
-                newRecipe.append(title_header, recipe_details)
+                newRecipe.append(title_header, recipe_details, link)
     
         
                 $("#search-results").append(newRecipe)
@@ -59,13 +59,15 @@ function showRecipes(evt) {
         console.log(params)
 
         // get recipe from spoonacular using the complexSearch endpoint
-        res = await axios.get("http://127.0.0.1:5000/api/get-recipe", {params: params})  
+        res = await axios.get("http://127.0.0.1:5000/api/get-recipes", {params: params})  
    
+        console.log(res)
         results = res.data.results // recipe results JSON
         console.log(results)
      
         show_recipe(results)
     }
+    
     resp = get_recipe() 
 
 }

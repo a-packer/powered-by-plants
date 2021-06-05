@@ -1,0 +1,113 @@
+:root {
+    --blue: #1e90ff;
+    --green: rgb(41, 185, 154);
+    --lightgreen: rgb(114, 211, 190);
+    --white: #ffffff;
+    --darkgrey: rgb(48, 48, 48);
+    --lightgrey: rgb(155, 155, 155);
+  }
+
+
+/* Remove the navbar's default margin-bottom and rounded borders */ 
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+    padding-left: 5px;
+    background-color: var(--green);
+    color: white;
+}
+a.navbar-brand {
+    color: white;
+}
+.navbar {
+    padding-right: 100px;
+}
+.navbar-nav li {
+    color: white;
+}
+.navbar-nav li a {
+    color: var(--white);
+}
+ .navbar-nav a:hover {
+  color: var(--darkgrey);
+}
+a.nav-link.active {
+    color: var(--darkgrey)
+}
+a.nav-link.active:hover {
+    color: var(--white)
+}
+
+
+h1 {
+    color: var(--green)
+}
+h1 em {
+    color: var(--lightgrey)
+}
+
+
+.img-responsive {
+    width:100%; 
+    height: 300px; 
+    object-fit: cover;
+}
+
+
+.img-div {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    opacity: 0.8;
+}
+.img-div:hover {
+    opacity: 1;
+    transition: opacity 0.8s;
+}
+
+.img-div p {
+    position: absolute;
+    bottom: 0%;
+    font-size: 30px;
+    color: white;
+    background-color: var(--green);
+    padding-inline: 10px;
+    text-align: center;
+}
+.img-div:hover p {
+    color: var(--darkgrey);
+    background: var(--lightgreen);
+    opacity: .8;
+    padding-inline: 15px;
+    margin-right: 5px;
+    transition: color .8s, background-color 0.8s, padding-inline 0.8s, margin 0.8s, opacity 0.8s;
+}
+
+
+
+
+/* Add a gray background color and some padding to the footer */
+footer {
+    background-color: var(--white);
+    padding: 25px;
+}
+
+.carousel-inner img {
+    width: 100%; /* Set width to 100% */
+    margin: auto;
+    min-height:200px;
+}
+
+
+/* Hide the carousel text when the screen is less than 600 pixels wide */
+@media (max-width: 600px) {
+    .carousel-caption {
+        display: none; 
+    }
+}
+
+@media (max-width: 300px) {
+    .navbar {
+        padding-right: 0px;
+    }
+}

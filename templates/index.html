@@ -1,10 +1,5 @@
-<!doctype html>
-<html>
-<head>
-  <title>Powered By Plants</title>
-  <script src="https://unpkg.com/jquery"></script>
+{% extends "base.html" %}
 
-  
 <style>
   /* The protein selection slider styles from W3Schools https://www.w3schools.com/howto/howto_js_rangeslider.asp*/
 .protein_scale {
@@ -42,25 +37,28 @@
 }
 </style>
 
-</head>
+{% block body %}
 
 
 <body>
-  <h1>Search recipe</h1>
+  <div class="container">
+    <h1>Search For Recipes</h1>
 
-  <form>
-      <input id="search-query" value="quinoa"></br>
+    <form>
+        <input id="search-query" value="quinoa"></br>
 
-      <input type="checkbox" id="gluten_free">
-      <label for="gluten_free">Gluten Free</label><br>
+        <input type="checkbox" id="gluten_free">
+        <label for="gluten_free">Gluten Free</label><br>
 
-      <label for="protein_scale"></label><p>Protien per Serving: <span id="demo"></span></p>
-      <input type="range" id="protein_scale" name="protein_scale" min=5 max=25></br>
+        <label for="protein_scale"></label><p>Protien per Serving: <span id="demo"></span></p>
+        <input type="range" id="protein_scale" name="protein_scale" min=5 max=25></br>
 
-      <button id="search">Search</button>
-  </form>
+        <button id="search">Search</button>
+    </form>
 
-  <div id="search-results"></div>
+    <div id="search-results"></div>
+
+  </div>
 
 
 
@@ -70,3 +68,5 @@
 
 </body>
 </html>
+
+{% endblock %}

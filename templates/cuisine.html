@@ -1,0 +1,111 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../static/styles/home.css">
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">PBP <i class="fa fa-leaf"></i></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsing-links" aria-controls="collapsing-links" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="collapsing-links">
+        <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Cuisines</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Favorites</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Popular</a>
+          </li>
+        </ul>
+        <form class="form-inline">
+          <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>          
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+      <h1 class="display-1"><em>Vegan Recipe </em>Cuisines</h1> 
+  </div>   
+
+    
+  <div> 
+      <div id="recipe_cuisines" class="container">
+          <div class="row">
+              <div class="col-sm-6 col-md-4  img-div">
+                  <img src="https://images.unsplash.com/photo-1616005944283-486e2bc22990?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8YXNpYW4lMjBmb29kfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60" class="img-responsive mt-2" alt="Asian Food Image by MadMax Chef">
+                  <p>Asian</p>
+              </div>
+              <div class="col-sm-6 col-md-4  img-div">
+                  <img src="https://images.unsplash.com/photo-1618414466256-4b62f39b5b30?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=996&q=80" class="img-responsive mt-2" alt="Tacos Image by Megan Sherling">
+                  <p>Mexican</p>  
+              </div>
+              <div class="col-sm-6 col-md-4  img-div">
+                <img src="https://images.unsplash.com/photo-1504670555658-db8fb2e908ac?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1500&q=80" class="img-responsive mt-2" alt="African Food Image by Naima Mungai">
+                <p>African</p>  
+              </div>
+              <div class="col-sm-6 col-md-4  img-div">
+                <img src="https://images.unsplash.com/photo-1616299908398-9af1134ad522?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fGl0YWxpYW4lMjBmb29kfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60" class="img-responsive mt-2" alt="Italian Food Image by Nerfee Mirandilla">
+                <p>Italian</p>  
+              </div>
+              <div class="col-sm-6 col-md-4  img-div">
+                <img src="https://images.unsplash.com/photo-1584283367830-626868ac1dd3?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dmVnZ2llJTIwYnVyZ2VyfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60" class="img-responsive mt-2" alt="American Food Image by Rolande PG">
+                <p>American</p>  
+              </div>
+              <div class="col-sm-6 col-md-4  img-div">
+                <img src="https://images.unsplash.com/photo-1591120583691-49d2741e55da?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bWVkaXRlcnJhbmVhbiUyMGZvb2R8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=60" class="img-responsive mt-2" alt="Mediterranean food Image by Mor Shani">
+                <p>Mediterranean</p>  
+              </div>           
+          </div>
+      </div>
+  </div><br>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+ 
+</body>
+</html>
+
+
+

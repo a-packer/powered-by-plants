@@ -80,11 +80,10 @@ class Recipe(db.Model):
 
     __tablename__ = 'recipes'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True) #db id same as API id
     title = db.Column(db.Text, nullable=False)
     img = db.Column(db.Text)
     protein = db.Column(db.Integer, nullable=False)
-    api_id = db.Column(db.Integer, nullable=False, unique=True) #api_id needs to be unique! keep out duplicates
     source_url = db.Column(db.Text, nullable=False)
     ingredients = db.Column(db.Text, nullable=False)
     instructions = db.Column(db.Text, nullable=False)
@@ -97,14 +96,14 @@ class Recipe(db.Model):
         return f"<Recipe #{self.id}: {self.title}, {self.img}, {self.protein}>"
 
     @classmethod
-    def addRecipe(cls, title, img, protein, api_id, source_url, ingredients, instructions, time, servings):
+    def addRecipe(cls, id, title, img, protein, source_url, ingredients, instructions, time, servings):
         """Adds a recipe to the db"""
 
         recipe = Recipe(
+            id=id,
             title=title,
             img=img,
             protein=protein,
-            api_id=api_id,
             source_url=source_url,
             ingredients=ingredients,
             instructions=instructions,

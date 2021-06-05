@@ -39,8 +39,8 @@ def experiment_landing_page():
     return render_template("home.html")
 
 
-@app.route("/api/get-recipe")
-def lucky_num_api():
+@app.route("/api/get-recipes")
+def gets_recipes_from_spoonacular():
     """gets recipe from spoonacular"""
 
     query = request.args.get("query") 
@@ -48,40 +48,41 @@ def lucky_num_api():
     min_protein = request.args.get("minProtein")
     intolerances = request.args.get("intolerances")
 
-    # import pdb; pdb.set_trace() 
-
-    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={key}&minProtein={min_protein}&intolerances=gluten&number=3&diet=vegan&query={query}&addRecipeInformation=True") 
+    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={key}&minProtein={min_protein}&intolerances={intolerances}&number=3&diet=vegan&query={query}&addRecipeInformation=True") 
     response_string = res.text
     response_dict = json.loads(response_string) #convert to json dict
 
-    # import pdb; pdb.set_trace() 
+    results = response_dict['results'] #get results as list 
+    
+    if results: # if there is at least one recipe returned
+        for i in range(len(results)): # loop through the recipes to check to see if in db. if not, add to db
 
-    results = response_dict['results'] #get results as list
- 
+            recipe = results[i]  # gets results for recipe
+            recipe_id = recipe['id']
 
-    if results: #if there is at least one recipe returned
-        recipe = results[0]  #gets results for first recipe from search query(current limit 3 recipes) then parses through response to get to protien amount
-        nutrition = recipe["nutrition"]  
-        nutrients = nutrition["nutrients"]
-        protein = nutrients[0]
-        amount = protein["amount"]  
-
-
+            db_recipe = Recipe.query.filter_by(id=recipe_id).first() 
+            if db_recipe == None:  # if no recipe is returned, get recipe data from api by id, then add recipe to db
+                res = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?includeNutrition=True&apiKey=67de1636f65f4322adffda4851c70b9d")
+                recipe = add_structure_recipe(res) # adds recipe to db, then returns relevant and structured recipe information
+    
         return jsonify(response_dict) 
     
-    else:
+    else: # if the search gives no results
+
+        import pdb; pdb.set_trace() 
+
         return jsonify({'results': [{'error' : 'none'}]})
 
    
 
-
 @app.route("/recipe/<int:recipe_id>", methods=["POST"])
 def add_recipe(recipe_id):
     """Adds recipe to db"""
+    import pdb; pdb.set_trace() 
 
     res = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?includeNutrition=True&apiKey=67de1636f65f4322adffda4851c70b9d")
 
-    # import pdb; pdb.set_trace() 
+    import pdb; pdb.set_trace() 
     recipe = add_structure_recipe(res) #adds recipe to db, then returns relevant and structured recipe information
 
     return redirect(f"/recipe/{recipe.id}")
@@ -94,12 +95,8 @@ def messages_show(recipe_id):
     ingredients = json.loads(recipe.ingredients)  #convert from json to list
     optional_ing = [ing for ing in ingredients if ing[1] == 'servings']
     instructions = json.loads(recipe.instructions) #convert from json to list
-    # import pdb; pdb.set_trace() 
+
     return render_template('recipe.html', recipe=recipe, ingredients=ingredients, optional_ing=optional_ing, instructions=instructions)
-
-
-
-
 
 
 

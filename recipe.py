@@ -7,11 +7,11 @@ def add_structure_recipe(res):
     response_string = res.text # get text from response
     response_dict = json.loads(response_string) #convert to json dict
 
-    # import pdb; pdb.set_trace() 
+    
+    id = response_dict["id"]
     title = response_dict["title"]
     img = response_dict["image"]
     protein = response_dict["nutrition"]["nutrients"][9]["amount"]
-    api_id = response_dict["id"]
     source_url = response_dict["sourceUrl"]
 
     ingredient_info = response_dict["extendedIngredients"] # list of ingredients with all the info
@@ -23,11 +23,13 @@ def add_structure_recipe(res):
     time = response_dict["readyInMinutes"]
     servings= response_dict["servings"]
 
+    # import pdb; pdb.set_trace() 
+    # adds recipe to database
     recipe = Recipe.addRecipe(
+        id=id,
         title=title,
         img=img,
         protein=protein,
-        api_id=api_id,
         source_url=source_url,
         ingredients=json.dumps(ingredients), #converts to json
         instructions=json.dumps(instructions), #converts to json
