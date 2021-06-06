@@ -34,9 +34,17 @@ def homepage():
 
     return render_template("index.html")
 
-@app.route("/landing")
-def experiment_landing_page():
-    return render_template("home.html")
+@app.route("/cuisine")
+def cuisine_search_results():
+    return render_template("cuisine.html")
+
+@app.route("/popular")
+def popular_search_results():
+    return render_template("popular.html")
+
+@app.route("/search")
+def search_page():
+    return render_template('search.html')
 
 
 @app.route("/api/get-recipes")
@@ -87,6 +95,8 @@ def add_recipe(recipe_id):
 
     return redirect(f"/recipe/{recipe.id}")
 
+
+
 @app.route('/recipe/<int:recipe_id>', methods=["GET"])
 def messages_show(recipe_id):
     """show recipe ingredients, instructions"""
@@ -96,6 +106,7 @@ def messages_show(recipe_id):
     optional_ing = [ing for ing in ingredients if ing[1] == 'servings']
     instructions = json.loads(recipe.instructions) #convert from json to list
 
+        
     return render_template('recipe.html', recipe=recipe, ingredients=ingredients, optional_ing=optional_ing, instructions=instructions)
 
 
@@ -131,11 +142,8 @@ def do_logout():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     """Handle user signup.
-
     Create new user and add to DB. Redirect to home page.
-
     If form not valid, present form.
-
     If the there already is a user with that username: flash message
     and re-present form.
     """
@@ -182,6 +190,7 @@ def login():
 
         flash("Invalid credentials.", 'danger')
 
+
     return render_template('login.html', form=form)
 
 
@@ -205,14 +214,12 @@ def users_show(user_id):
 
     user = User.query.get_or_404(user_id)
 
-    # TODO: get favorites
-    # favorites = (Favorite
-    #             .query
-    #             .filter(Favorite.user_id == user_id)
-    #             .limit(10)
-    #             .all())
-    # TODO: make user.html template
-    return render_template('user.html', user=user, favorites=favorites)
+    favorites = Favorite.query.filter(Favorite.user_id == user_id).limit(10).all()
+
+    fav_recipes = [Recipe.query.get_or_404(favorite.recipe_id) for favorite in favorites]
+    
+
+    return render_template('user.html', user=user, favorites=favorites, fav_recipes=fav_recipes)
     
 
 @app.route('/users/delete', methods=["POST"])
@@ -231,30 +238,41 @@ def delete_user():
     return redirect("/signup")
 
 
+
+#################
+# Favorites
+
 @app.route('/users/add_fav/<int:recipe_id>', methods=["GET", "POST"])
 def add_like(recipe_id):
-    """Add favorite recipe"""
+    """Add favorite recipe"""  
 
     user = User.query.get_or_404(g.user.id)
     recipe = Recipe.query.get_or_404(recipe_id)
     
-    # check to see if recipe in liked favorite recipes already. If not, add to recipes
-    fav_recipes = user.recipes
+    # check to see if recipe in favorite recipes already. If already a favorite, remove from favorite recipes. If not, add to favorite recipes. 
+    fav_recipes = user.recipes 
+    fav_recipe_ids = [fav_recipe.recipe_id for fav_recipe in fav_recipes]
 
-    # import pdb; pdb.set_trace()
-   
-    fav_recipe_ids = [fav_recipe.id for fav_recipe in fav_recipes]
     if recipe.id in fav_recipe_ids:
-        fav_recipe_ids.remove(recipe.id)
-        user.recipes = [Recipe.query.get(recipe_id) for recipe_id in fav_recipe_ids]
+        updated_fav_recipes = [] # TODO: There must be a way to remove from favorites without remaking a favorites list and just not adding the one that's being removed
+        for favorite in fav_recipes:
+            if recipe.id == favorite.recipe_id:
+                pass
+            else:
+                updated_fav_recipes.append(favorite)
+        
+        user.recipes = updated_fav_recipes
         db.session.commit()
-        # return (f"recipe {recipe.title} removed from {user.first_name}'s favorites")
-        return redirect('/recipe/<int:recipe_id>')
+
+        flash(f"Removed {recipe.title} from favorites", "danger")
+        return redirect(f"/recipe/{recipe.id}")
+
     else:
-        user.recipes.append(Favorite(user_id=user.id, recipe_id=recipe_id)) 
+        g.user.recipes.append(Favorite(user_id=user.id, recipe_id=recipe_id)) 
         db.session.commit()
-        # return (f"recipe {recipe.title} added to {user.first_name}'s favorites")
-        return redirect('/recipe/<int:recipe_id>')
+
+        flash(f"Added {recipe.title} to favorites", "success")
+        return redirect(f"/recipe/{recipe.id}")
    
    
 

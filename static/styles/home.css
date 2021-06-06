@@ -38,7 +38,9 @@ a.nav-link.active:hover {
     color: var(--white)
 }
 
-
+/*----------------------------------*/
+/*_______ Cuisine Page styles______*/
+/*--------------------------------*/
 h1 {
     color: var(--green)
 }
@@ -46,14 +48,11 @@ h1 em {
     color: var(--lightgrey)
 }
 
-
 .img-responsive {
     width:100%; 
     height: 300px; 
     object-fit: cover;
 }
-
-
 .img-div {
     position: relative;
     display: flex;
@@ -64,7 +63,6 @@ h1 em {
     opacity: 1;
     transition: opacity 0.8s;
 }
-
 .img-div p {
     position: absolute;
     bottom: 0%;
@@ -83,31 +81,13 @@ h1 em {
     transition: color .8s, background-color 0.8s, padding-inline 0.8s, margin 0.8s, opacity 0.8s;
 }
 
+/*------------------------------------------*/
+/*___________ Recipe Page Styles __________*/
+/*----------------------------------------*/
 
 
 
-/* Add a gray background color and some padding to the footer */
-footer {
-    background-color: var(--white);
-    padding: 25px;
-}
-
-.carousel-inner img {
-    width: 100%; /* Set width to 100% */
-    margin: auto;
-    min-height:200px;
-}
-
-
-/* Hide the carousel text when the screen is less than 600 pixels wide */
-@media (max-width: 600px) {
-    .carousel-caption {
-        display: none; 
-    }
-}
-
-@media (max-width: 300px) {
-    .navbar {
-        padding-right: 0px;
-    }
+.fav_true {
+    background: rgb(187, 90, 90);
+    color: black;
 }

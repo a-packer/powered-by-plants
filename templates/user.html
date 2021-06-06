@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h1>Your Recipes</h1>
+<h1>{{ user.first_name }}'s Favorites</h1>
+
 <div id="favorites">
-    {% for recipe in favorites%}
-    <div>recipe.title</div>
+    {% for recipe in fav_recipes %}
+    <div>
+        <h3><a href='/recipe/{{recipe.id}}'>{{ recipe.title }}</a></h3>
+    </div>
     {% endfor %}
 </div>
-
 
 {% endblock %}

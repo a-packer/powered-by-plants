@@ -73,16 +73,16 @@ function showRecipes(evt) {
 }
 
 
-// ------------Protein amount slider -------------------
-var slider = document.getElementById("protein_scale");
-var output = document.getElementById("demo");
-output.innerHTML = slider.value; // Display the default slider value
+// // ------------Protein amount slider -------------------
+// var slider = document.getElementById("protein_scale");
+// var output = document.getElementById("demo");
+// output.innerHTML = slider.value; // Display the default slider value
 
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-  output.innerHTML = this.value;
-}
-// -------------------------------
+// // Update the current slider value (each time you drag the slider handle)
+// slider.oninput = function() {
+//   output.innerHTML = this.value;
+// }
+// // -------------------------------
 
 
 function Login() {   
@@ -95,7 +95,26 @@ function Signout() {
 }
 
 
+// -------------Favorite Button-----------
+
+// fav_btn = document.getElementById("favorite_button");
+// fav_btn.addEventListener('click', function(e) {
+// e.preventDefault()
+
+// if ("fav_true" in fav_btn.classList) {
+//     fav_btn.innerText = "Remove Favorite"
+//     fav_btn.classList.remove("fav_true")
+// }
+// else {    
+//     fav_btn.innerText = "hello"  
+//     fav_btn.classList.add("fav_true")
+// }
+// })  
+
+
+
 $("#search").on("click", showRecipes);
+
 
 
 
