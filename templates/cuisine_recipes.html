@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+  <div class="container">
+      <h1 class="display-1"><em>Vegan Recipe </em>Cuisines</h1> 
+  </div>   
+
+  {% for recipe in cuisine_recipes %}
+  <h3><a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a></h3>
+  <img src="{{ recipe.img }}">
+  {% endfor %}
+
+{% endblock %}

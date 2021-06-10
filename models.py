@@ -127,7 +127,7 @@ class Favorite(db.Model):
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id', ondelete="CASCADE"))
 
     user = db.relationship("User", backref="recipes")
-    recipe = db.relationship("Recipe", backref="users")
+    recipe = db.relationship("Recipe", backref="users") 
 
     
 

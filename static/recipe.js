@@ -7,8 +7,6 @@ function showRecipes(evt) {
  
         $("#search-results").empty()  // clear previous search results
 
-        console.log(results)
-
         if (!results.error) {
             for (recipe of results) {
 
@@ -56,34 +54,17 @@ function showRecipes(evt) {
         protein = $("#protein_scale").val()
         
         params =  {"query": query, intolerances : intolerances, "minProtein" : protein , "number" : 1, "diet" : "vegan"}
-        console.log(params)
 
         // get recipe from spoonacular using the complexSearch endpoint
         res = await axios.get("http://127.0.0.1:5000/api/get-recipes", {params: params})  
-   
-        console.log(res)
-        results = res.data.results // recipe results JSON
-        console.log(results)
-     
+
+        results = res.data.results // recipe results JSON   
         show_recipe(results)
     }
     
     resp = get_recipe() 
 
 }
-
-
-// // ------------Protein amount slider -------------------
-// var slider = document.getElementById("protein_scale");
-// var output = document.getElementById("demo");
-// output.innerHTML = slider.value; // Display the default slider value
-
-// // Update the current slider value (each time you drag the slider handle)
-// slider.oninput = function() {
-//   output.innerHTML = this.value;
-// }
-// // -------------------------------
-
 
 function Login() {   
 }
@@ -95,21 +76,16 @@ function Signout() {
 }
 
 
-// -------------Favorite Button-----------
+//------------Protein amount slider -------------------
+var slider = document.getElementById("protein_scale");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value; // Display the default slider value
 
-// fav_btn = document.getElementById("favorite_button");
-// fav_btn.addEventListener('click', function(e) {
-// e.preventDefault()
-
-// if ("fav_true" in fav_btn.classList) {
-//     fav_btn.innerText = "Remove Favorite"
-//     fav_btn.classList.remove("fav_true")
-// }
-// else {    
-//     fav_btn.innerText = "hello"  
-//     fav_btn.classList.add("fav_true")
-// }
-// })  
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.innerHTML = this.value;
+}
+//-------------------------------
 
 
 

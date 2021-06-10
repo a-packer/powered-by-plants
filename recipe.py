@@ -19,11 +19,17 @@ def add_structure_recipe(res):
     for ing in ingredient_info: # make a list with just the amount, unit, name
         ingredients.append([ing["amount"], ing["unit"], ing["name"]])
 
-    instructions = response_dict["analyzedInstructions"][0]["steps"]
+    # import pdb; pdb.set_trace() 
+
+    if len(response_dict["analyzedInstructions"]) != 0:
+        instructions = response_dict["analyzedInstructions"][0]["steps"]
+    else:
+        instructions = {}
     time = response_dict["readyInMinutes"]
     servings= response_dict["servings"]
 
     # import pdb; pdb.set_trace() 
+    
     # adds recipe to database
     recipe = Recipe.addRecipe(
         id=id,

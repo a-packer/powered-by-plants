@@ -1,4 +1,5 @@
 import os
+from pdb import set_trace
 
 import requests
 import json
@@ -16,8 +17,7 @@ CURR_USER_KEY = "curr_user"
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///powered_by_plants'))
+app.config['SQLALCHEMY_DATABASE_URI'] = (os.environ.get('DATABASE_URL', 'postgresql:///powered_by_plants'))
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
@@ -27,6 +27,8 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
+API_KEY = "67de1636f65f4322adffda4851c70b9d"
+
 
 @app.route("/")
 def homepage():
@@ -35,12 +37,59 @@ def homepage():
     return render_template("index.html")
 
 @app.route("/cuisine")
-def cuisine_search_results():
+def cuisine_search():
+    """landing page for recipe cuisines to search by"""
     return render_template("cuisine.html")
+
+@app.route("/cuisine/<cuisine>")
+def cuisine_search_results(cuisine):
+    """gets recipes for a specified cuisine"""
+
+    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&minProtein=5&number=5&diet=vegan&addRecipeInformation=True&cuisine={cuisine}") 
+    response_string = res.text
+    response_dict = json.loads(response_string) #convert to json dict
+
+    results = response_dict['results'] #get results as list 
+
+    if results: # if there is at least one recipe returned
+        for i in range(len(results)): # loop through the recipes to check to see if in db. if not, add to db
+
+            recipe = results[i]  # gets results for recipe
+            recipe_id = recipe['id']
+
+            db_recipe = Recipe.query.filter_by(id=recipe_id).first() 
+            if db_recipe == None:  # if no recipe is returned, get recipe data from api by id, then add recipe to db
+                res = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?includeNutrition=True&apiKey=67de1636f65f4322adffda4851c70b9d")
+                recipe = add_structure_recipe(res) # adds recipe to db, then returns relevant and structured recipe information
+    
+        # return jsonify(response_dict) 
+        cuisine_recipes = []
+        for recipe in response_dict["results"]:
+            recipe = Recipe.query.get_or_404(recipe["id"])
+            cuisine_recipes.append(recipe)
+    
+    else: # if the search gives no results
+
+        import pdb; pdb.set_trace() 
+
+        return jsonify({'results': [{'error' : 'none'}]})
+
+    
+    return render_template("cuisine_recipes.html", cuisine_recipes=cuisine_recipes)
 
 @app.route("/popular")
 def popular_search_results():
-    return render_template("popular.html")
+    """Returns recipes favorited by all users"""
+    
+    favorites = Favorite.query.all()
+    fav_ids = [favorite.recipe_id for favorite in favorites]
+    fav_ids_set = set(fav_ids) #remove duplicates
+
+    top_recipes = []
+    for id in fav_ids_set:
+        top_recipes.append(Recipe.query.get_or_404(id))
+    
+    return render_template("popular.html", top_recipes=top_recipes)
 
 @app.route("/search")
 def search_page():
@@ -49,14 +98,13 @@ def search_page():
 
 @app.route("/api/get-recipes")
 def gets_recipes_from_spoonacular():
-    """gets recipe from spoonacular"""
+    """gets recipe from spoonacular and returns recipe json data"""
 
     query = request.args.get("query") 
-    key = "67de1636f65f4322adffda4851c70b9d"
     min_protein = request.args.get("minProtein")
     intolerances = request.args.get("intolerances")
 
-    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={key}&minProtein={min_protein}&intolerances={intolerances}&number=3&diet=vegan&query={query}&addRecipeInformation=True") 
+    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&minProtein={min_protein}&intolerances={intolerances}&number=3&diet=vegan&query={query}&addRecipeInformation=True") 
     response_string = res.text
     response_dict = json.loads(response_string) #convert to json dict
 
@@ -82,21 +130,6 @@ def gets_recipes_from_spoonacular():
         return jsonify({'results': [{'error' : 'none'}]})
 
    
-
-@app.route("/recipe/<int:recipe_id>", methods=["POST"])
-def add_recipe(recipe_id):
-    """Adds recipe to db"""
-    import pdb; pdb.set_trace() 
-
-    res = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?includeNutrition=True&apiKey=67de1636f65f4322adffda4851c70b9d")
-
-    import pdb; pdb.set_trace() 
-    recipe = add_structure_recipe(res) #adds recipe to db, then returns relevant and structured recipe information
-
-    return redirect(f"/recipe/{recipe.id}")
-
-
-
 @app.route('/recipe/<int:recipe_id>', methods=["GET"])
 def messages_show(recipe_id):
     """show recipe ingredients, instructions"""
@@ -105,9 +138,18 @@ def messages_show(recipe_id):
     ingredients = json.loads(recipe.ingredients)  #convert from json to list
     optional_ing = [ing for ing in ingredients if ing[1] == 'servings']
     instructions = json.loads(recipe.instructions) #convert from json to list
-
+ 
+    #determine if recipe is current user's favorite
+    recipe_favorites = recipe.users
+    user_ids = [favorite.user_id for favorite in recipe_favorites]
+    user_ids_set = set(user_ids)
+    user_ids_unique = [id for id in user_ids_set]
+    if g.user.id in user_ids_unique:
+        user_favorite = True
+    else:
+        user_favorite = False
         
-    return render_template('recipe.html', recipe=recipe, ingredients=ingredients, optional_ing=optional_ing, instructions=instructions)
+    return render_template('recipe.html', recipe=recipe, ingredients=ingredients, optional_ing=optional_ing, instructions=instructions, user_favorite=user_favorite)
 
 
 
@@ -238,8 +280,7 @@ def delete_user():
     return redirect("/signup")
 
 
-
-#################
+####################################
 # Favorites
 
 @app.route('/users/add_fav/<int:recipe_id>', methods=["GET", "POST"])
@@ -253,8 +294,8 @@ def add_like(recipe_id):
     fav_recipes = user.recipes 
     fav_recipe_ids = [fav_recipe.recipe_id for fav_recipe in fav_recipes]
 
-    if recipe.id in fav_recipe_ids:
-        updated_fav_recipes = [] # TODO: There must be a way to remove from favorites without remaking a favorites list and just not adding the one that's being removed
+    if recipe.id in fav_recipe_ids: # TODO: Remove this Favorite ? ondelete cascade? Not sure how to do this
+        updated_fav_recipes = [] 
         for favorite in fav_recipes:
             if recipe.id == favorite.recipe_id:
                 pass
