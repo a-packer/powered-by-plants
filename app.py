@@ -283,9 +283,9 @@ def delete_user():
 ####################################
 # Favorites
 
-@app.route('/users/add_fav/<int:recipe_id>', methods=["GET", "POST"])
-def add_like(recipe_id):
-    """Add favorite recipe"""  
+@app.route('/users/favorite/<int:recipe_id>', methods=["GET", "POST"])
+def favorite_recipe(recipe_id):
+    """Add or remove favorite recipe"""  
 
     user = User.query.get_or_404(g.user.id)
     recipe = Recipe.query.get_or_404(recipe_id)
@@ -294,7 +294,7 @@ def add_like(recipe_id):
     fav_recipes = user.recipes 
     fav_recipe_ids = [fav_recipe.recipe_id for fav_recipe in fav_recipes]
 
-    if recipe.id in fav_recipe_ids: # TODO: Remove this Favorite ? ondelete cascade? Not sure how to do this
+    if recipe.id in fav_recipe_ids: # TODO: If this recipe id already in current user's favorites, remove this Favorite. Not sure how to do this?
         updated_fav_recipes = [] 
         for favorite in fav_recipes:
             if recipe.id == favorite.recipe_id:
