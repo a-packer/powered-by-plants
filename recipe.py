@@ -10,7 +10,11 @@ def add_structure_recipe(res):
     
     id = response_dict["id"]
     title = response_dict["title"]
-    img = response_dict["image"]
+    try:
+        img = response_dict["image"]
+    except KeyError:
+        print("No image available")
+        img = ""
     protein = response_dict["nutrition"]["nutrients"][9]["amount"]
     source_url = response_dict["sourceUrl"]
 

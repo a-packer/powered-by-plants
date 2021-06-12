@@ -6,7 +6,7 @@
 
 
 <h1>{{recipe.title}}</h1>
-<form method="POST" action="/users/favorite/{{ recipe.id }}" id="fav_form">
+<form method="POST" action="/user/favorite/{{ recipe.id }}" id="fav_form">
     <button class="btn btn-outline-primary btn-sm" id="favorite_button">
         {% if user_favorite %}
             Remove Favorite

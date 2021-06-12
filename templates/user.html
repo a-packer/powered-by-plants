@@ -2,6 +2,10 @@
 
 {% block body %}
 <h1>{{ user.first_name }}'s Favorites</h1>
+<form action="/user/delete/{{user.id}}" method="GET">
+    <button>Delete Account</button>
+</form>
+
 
 <div id="favorites">
     {% for recipe in fav_recipes %}

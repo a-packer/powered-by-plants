@@ -98,7 +98,7 @@ def search_page():
 
 @app.route("/api/get-recipes")
 def gets_recipes_from_spoonacular():
-    """gets recipe from spoonacular and returns recipe json data"""
+    """gets recipe from spoonacular and returns recipe json data. If recipe not in db, add recipe to db."""
 
     query = request.args.get("query") 
     min_protein = request.args.get("minProtein")
@@ -113,13 +113,13 @@ def gets_recipes_from_spoonacular():
     if results: # if there is at least one recipe returned
         for i in range(len(results)): # loop through the recipes to check to see if in db. if not, add to db
 
-            recipe = results[i]  # gets results for recipe
-            recipe_id = recipe['id']
+            recipe_info = results[i]  # gets results for recipe, including the recipe id
+            recipe_id = recipe_info['id']
 
-            db_recipe = Recipe.query.filter_by(id=recipe_id).first() 
-            if db_recipe == None:  # if no recipe is returned, get recipe data from api by id, then add recipe to db
+            db_recipe = Recipe.query.filter_by(id=recipe_id).first() # check db to see if it contains a recipe with the id in question
+            if db_recipe == None:  # if no recipe is returned, get recipe data from api by the id, then add recipe to db
                 res = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?includeNutrition=True&apiKey=67de1636f65f4322adffda4851c70b9d")
-                recipe = add_structure_recipe(res) # adds recipe to db, then returns relevant and structured recipe information
+                add_structure_recipe(res) # adds recipe to db, then returns relevant and structured recipe information
     
         return jsonify(response_dict) 
     
@@ -128,6 +128,7 @@ def gets_recipes_from_spoonacular():
         import pdb; pdb.set_trace() 
 
         return jsonify({'results': [{'error' : 'none'}]})
+
 
    
 @app.route('/recipe/<int:recipe_id>', methods=["GET"])
@@ -144,10 +145,16 @@ def messages_show(recipe_id):
     user_ids = [favorite.user_id for favorite in recipe_favorites]
     user_ids_set = set(user_ids)
     user_ids_unique = [id for id in user_ids_set]
-    if g.user.id in user_ids_unique:
-        user_favorite = True
-    else:
+    
+    try:
+        g.user.id
+    except AttributeError:
         user_favorite = False
+    else:        
+        if g.user.id in user_ids_unique:
+            user_favorite = True
+        else:
+            user_favorite = False
         
     return render_template('recipe.html', recipe=recipe, ingredients=ingredients, optional_ing=optional_ing, instructions=instructions, user_favorite=user_favorite)
 
@@ -250,9 +257,13 @@ def logout():
 # General user routes:
 
 
-@app.route('/users/<int:user_id>')
+@app.route('/user/<int:user_id>')
 def users_show(user_id):
     """Show user profile and favorite recipes"""
+
+    if not g.user:
+        flash("Login/Signup To See Favorited Recipes.", "danger")
+        return redirect("/login")
 
     user = User.query.get_or_404(user_id)
 
@@ -264,28 +275,46 @@ def users_show(user_id):
     return render_template('user.html', user=user, favorites=favorites, fav_recipes=fav_recipes)
     
 
-@app.route('/users/delete', methods=["POST"])
-def delete_user():
-    """Delete user."""
+@app.route('/user/delete/<int:user_id>', methods=["GET"]) # check user's credentials. If user is attempting to delete their own account, redirect to delete_check page
+def delete_user_check(user_id):
+    """First step to deleting a user."""
 
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/")
+        return redirect(f"/user/{user_id}")
 
-    do_logout()
+    if g.user.id != user_id:
+        import pdb; pdb.set_trace()
+        flash("Unauthorized. Need to be signed in as this user.", "danger")
+        return redirect(f"/user/{user_id}")
+    else:
+        return render_template("delete_check.html")
 
-    db.session.delete(g.user)
-    db.session.commit()
+    
+
+@app.route('/user/delete/<int:user_id>', methods=["POST"])
+def delete_user(user_id):
+    """Deletes user from database."""
+
+    if g.user.id == user_id:
+        do_logout()
+
+        db.session.delete(g.user)
+        db.session.commit()
 
     return redirect("/signup")
 
 
-####################################
+##############################################################
 # Favorites
 
-@app.route('/users/favorite/<int:recipe_id>', methods=["GET", "POST"])
+@app.route('/user/favorite/<int:recipe_id>', methods=["GET", "POST"])
 def favorite_recipe(recipe_id):
     """Add or remove favorite recipe"""  
+
+    if not g.user:
+        flash("Login/Signup To See Recipes.", "danger")
+        return redirect("/login")
 
     user = User.query.get_or_404(g.user.id)
     recipe = Recipe.query.get_or_404(recipe_id)

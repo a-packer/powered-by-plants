@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>Are you sure you want to delete?</h1>
+<form action="/user/delete/{{g.user.id}}" method="POST">
+    <button>Delete Account</button>
+</form>
+<form action="/user/{{g.user.id}}" method="GET">
+    <button>Keep it</button>
+</form>
+
+{% endblock %}
