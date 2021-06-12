@@ -36,6 +36,13 @@ def homepage():
 
     return render_template("index.html")
 
+##############################################################################
+# Recipe Search/filtering routes 
+
+@app.route("/search")
+def search_page():
+    return render_template('search.html')
+
 @app.route("/cuisine")
 def cuisine_search():
     """landing page for recipe cuisines to search by"""
@@ -43,7 +50,7 @@ def cuisine_search():
 
 @app.route("/cuisine/<cuisine>")
 def cuisine_search_results(cuisine):
-    """gets recipes for a specified cuisine"""
+    """Gets recipes for a specified cuisine"""
 
     res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&minProtein=5&number=5&diet=vegan&addRecipeInformation=True&cuisine={cuisine}") 
     response_string = res.text
@@ -62,7 +69,6 @@ def cuisine_search_results(cuisine):
                 res = requests.get(f"https://api.spoonacular.com/recipes/{recipe_id}/information?includeNutrition=True&apiKey=67de1636f65f4322adffda4851c70b9d")
                 recipe = add_structure_recipe(res) # adds recipe to db, then returns relevant and structured recipe information
     
-        # return jsonify(response_dict) 
         cuisine_recipes = []
         for recipe in response_dict["results"]:
             recipe = Recipe.query.get_or_404(recipe["id"])
@@ -70,16 +76,14 @@ def cuisine_search_results(cuisine):
     
     else: # if the search gives no results
 
-        import pdb; pdb.set_trace() 
-
+        import pdb; pdb.set_trace()  # TODO: FLash a message that tells user to search for a different thing, or lower the protein requirement
         return jsonify({'results': [{'error' : 'none'}]})
-
     
     return render_template("cuisine_recipes.html", cuisine_recipes=cuisine_recipes)
 
 @app.route("/popular")
 def popular_search_results():
-    """Returns recipes favorited by all users"""
+    """Returns recipes favorited by users"""
     
     favorites = Favorite.query.all()
     fav_ids = [favorite.recipe_id for favorite in favorites]
@@ -90,11 +94,6 @@ def popular_search_results():
         top_recipes.append(Recipe.query.get_or_404(id))
     
     return render_template("popular.html", top_recipes=top_recipes)
-
-@app.route("/search")
-def search_page():
-    return render_template('search.html')
-
 
 @app.route("/api/get-recipes")
 def gets_recipes_from_spoonacular():
