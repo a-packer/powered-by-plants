@@ -48,6 +48,7 @@ h1 em {
     color: var(--lightgrey)
 }
 
+
 .img-responsive {
     width:100%; 
     height: 300px; 
@@ -79,6 +80,13 @@ h1 em {
     padding-inline: 15px;
     margin-right: 5px;
     transition: color .8s, background-color 0.8s, padding-inline 0.8s, margin 0.8s, opacity 0.8s;
+}
+
+
+i.search-icon {
+    font-size: 80px;
+    color: var(--green);
+    size: 50px;
 }
 
 /*------------------------------------------*/

@@ -41,12 +41,12 @@ def homepage():
 
 @app.route("/search")
 def search_page():
-    return render_template('search.html')
+    return render_template('recipe_templates/search.html')
 
 @app.route("/cuisine")
 def cuisine_search():
     """landing page for recipe cuisines to search by"""
-    return render_template("cuisine.html")
+    return render_template("recipe_templates/cuisine.html")
 
 @app.route("/cuisine/<cuisine>")
 def cuisine_search_results(cuisine):
@@ -79,7 +79,7 @@ def cuisine_search_results(cuisine):
         import pdb; pdb.set_trace()  # TODO: FLash a message that tells user to search for a different thing, or lower the protein requirement
         return jsonify({'results': [{'error' : 'none'}]})
     
-    return render_template("cuisine_recipes.html", cuisine_recipes=cuisine_recipes)
+    return render_template("recipe_templates/cuisine_recipes.html", cuisine_recipes=cuisine_recipes)
 
 @app.route("/popular")
 def popular_search_results():
@@ -93,7 +93,7 @@ def popular_search_results():
     for id in fav_ids_set:
         top_recipes.append(Recipe.query.get_or_404(id))
     
-    return render_template("popular.html", top_recipes=top_recipes)
+    return render_template("recipe_templates/popular.html", top_recipes=top_recipes)
 
 @app.route("/api/get-recipes")
 def gets_recipes_from_spoonacular():
@@ -155,13 +155,12 @@ def messages_show(recipe_id):
         else:
             user_favorite = False
         
-    return render_template('recipe.html', recipe=recipe, ingredients=ingredients, optional_ing=optional_ing, instructions=instructions, user_favorite=user_favorite)
+    return render_template('recipe_templates/recipe.html', recipe=recipe, ingredients=ingredients, optional_ing=optional_ing, instructions=instructions, user_favorite=user_favorite)
 
 
 
 ##############################################################################
 # User signup/login/logout
-
 
 @app.before_request
 def add_user_to_g():
@@ -173,12 +172,10 @@ def add_user_to_g():
     else:
         g.user = None
 
-
 def do_login(user):
     """Log in user."""
 
     session[CURR_USER_KEY] = user.id
-
 
 def do_logout():
     """Logout user."""
@@ -211,7 +208,7 @@ def signup():
 
         except IntegrityError:
             flash("Username already taken", 'danger')
-            return render_template('signup.html', form=form)
+            return render_template('user_templates/signup.html', form=form)
 
         do_login(user)
 
@@ -239,7 +236,7 @@ def login():
         flash("Invalid credentials.", 'danger')
 
 
-    return render_template('login.html', form=form)
+    return render_template('user_templates/login.html', form=form)
 
 
 @app.route('/logout')
@@ -252,7 +249,7 @@ def logout():
     return redirect('/')
 
 
-##############################################################################
+####################################################################
 # General user routes:
 
 
@@ -271,7 +268,7 @@ def users_show(user_id):
     fav_recipes = [Recipe.query.get_or_404(favorite.recipe_id) for favorite in favorites]
     
 
-    return render_template('user.html', user=user, favorites=favorites, fav_recipes=fav_recipes)
+    return render_template('user_templates/user.html', user=user, favorites=favorites, fav_recipes=fav_recipes)
     
 
 @app.route('/user/delete/<int:user_id>', methods=["GET"]) # check user's credentials. If user is attempting to delete their own account, redirect to delete_check page
@@ -287,10 +284,9 @@ def delete_user_check(user_id):
         flash("Unauthorized. Need to be signed in as this user.", "danger")
         return redirect(f"/user/{user_id}")
     else:
-        return render_template("delete_check.html")
+        return render_template("user_templates/delete_check.html")
 
     
-
 @app.route('/user/delete/<int:user_id>', methods=["POST"])
 def delete_user(user_id):
     """Deletes user from database."""
@@ -304,7 +300,7 @@ def delete_user(user_id):
     return redirect("/signup")
 
 
-##############################################################
+######################################################################
 # Favorites
 
 @app.route('/user/favorite/<int:recipe_id>', methods=["GET", "POST"])
@@ -317,27 +313,26 @@ def favorite_recipe(recipe_id):
 
     user = User.query.get_or_404(g.user.id)
     recipe = Recipe.query.get_or_404(recipe_id)
+    fav_recipes = Favorite.query.filter_by(user_id=user.id).all()
     
     # check to see if recipe in favorite recipes already. If already a favorite, remove from favorite recipes. If not, add to favorite recipes. 
-    fav_recipes = user.recipes 
     fav_recipe_ids = [fav_recipe.recipe_id for fav_recipe in fav_recipes]
+  
+    if recipe.id in fav_recipe_ids: # If this recipe id is already in current user's favorites, delete it
 
-    if recipe.id in fav_recipe_ids: # TODO: If this recipe id already in current user's favorites, remove this Favorite. Not sure how to do this?
-        updated_fav_recipes = [] 
-        for favorite in fav_recipes:
-            if recipe.id == favorite.recipe_id:
-                pass
+        for fav in fav_recipes: # loop through user's favorite recipes
+            if recipe.id == fav.recipe_id:  # when it gets to the recipe we are trying to delete
+                f = Favorite.query.get(fav.id)  # get the Favorite object that relates this user this recipe by the Favorite's id
+                db.session.delete(f)
+                db.session.commit()
             else:
-                updated_fav_recipes.append(favorite)
+                pass
         
-        user.recipes = updated_fav_recipes
-        db.session.commit()
-
         flash(f"Removed {recipe.title} from favorites", "danger")
         return redirect(f"/recipe/{recipe.id}")
 
     else:
-        g.user.recipes.append(Favorite(user_id=user.id, recipe_id=recipe_id)) 
+        g.user.recipes.append(Favorite(user_id=user.id, recipe_id=recipe_id, is_favorite=True)) 
         db.session.commit()
 
         flash(f"Added {recipe.title} to favorites", "success")

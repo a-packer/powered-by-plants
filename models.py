@@ -1,6 +1,5 @@
 """SQLAlchemy models for Powered By Plants."""
 
-from datetime import datetime
 import bcrypt
 
 from flask_bcrypt import Bcrypt

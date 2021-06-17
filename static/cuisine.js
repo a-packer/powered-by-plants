@@ -1,4 +1,5 @@
 // --------------- Other Cuisine Button -----------------
+
 var cuisineForm = document.getElementById("cuisine_form");
 cuisineForm.addEventListener("submit", function(evt) {
     evt.preventDefault()

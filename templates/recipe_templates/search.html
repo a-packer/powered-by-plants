@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+
+
+<body>
+  <div class="container">
+    
+    <h1>Search For Recipes</h1>
+
+
+    <div class="container">
+      <h2>Cuisines</h2>
+      <button><a href="/cuisine">Search Cuisines</a></button>
+      <i class="fa fa-globe search-icon"></i>
+    </div>
+
+    <div class="container">
+      <h2>Popular</h2>
+      <button><a href="/popular">Most Popular</a></button>
+      <i class="fa fa-star search-icon"></i>
+    </div>
+
+    <div class="container">
+      <h2>Key Word</h2>
+      <form>
+          <input id="search-query" value="quinoa"></br>
+
+          <input type="checkbox" id="gluten_free">
+          <label for="gluten_free">Gluten Free</label><br>
+
+          <label for="protein_scale"></label><p>Protein per Serving: <span id="demo"></span></p>
+          <input type="range" id="protein_scale" name="protein_scale" min=5 max=25></br>
+
+          <button id="search">Search</button>
+      </form>
+      <div id="search-results"></div>
+      <i class="fa fa-search search-icon"></i>
+    </div>
+    
+
+  </div>
+
+
+
+
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<script src="/static/recipe.js"></script>
+<script src="/static/protein.js"></script>
+
+
+</html>
+
+{% endblock %}
