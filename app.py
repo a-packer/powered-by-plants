@@ -10,7 +10,8 @@ from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm
 from models import db, connect_db, User, Recipe, Favorite
-from recipe import add_structure_recipe
+from login_logout import do_login, do_logout
+from recipe import add_structure_recipe, gets_recipes
 
 CURR_USER_KEY = "curr_user"
 
@@ -75,9 +76,7 @@ def cuisine_search_results(cuisine):
             cuisine_recipes.append(recipe)
     
     else: # if the search gives no results
-
-        import pdb; pdb.set_trace()  # TODO: FLash a message that tells user to search for a different thing, or lower the protein requirement
-        return jsonify({'results': [{'error' : 'none'}]})
+        return redirect('/cuisine')
     
     return render_template("recipe_templates/cuisine_recipes.html", cuisine_recipes=cuisine_recipes)
 
@@ -103,16 +102,14 @@ def gets_recipes_from_spoonacular():
     min_protein = request.args.get("minProtein")
     intolerances = request.args.get("intolerances")
 
-    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&minProtein={min_protein}&intolerances={intolerances}&number=3&diet=vegan&query={query}&addRecipeInformation=True") 
-    response_string = res.text
-    response_dict = json.loads(response_string) #convert to json dict
+    response_dict = gets_recipes(API_KEY, min_protein, intolerances, query) # make request to API with query data
+    results = response_dict['results'] # get recipe results as list
 
-    results = response_dict['results'] #get results as list 
     
-    if results: # if there is at least one recipe returned
+    if len(results) > 0: # if there is at least one recipe returned
         for i in range(len(results)): # loop through the recipes to check to see if in db. if not, add to db
 
-            recipe_info = results[i]  # gets results for recipe, including the recipe id
+            recipe_info = results[i]  # get info for recipe, including the recipe id
             recipe_id = recipe_info['id']
 
             db_recipe = Recipe.query.filter_by(id=recipe_id).first() # check db to see if it contains a recipe with the id in question
@@ -124,9 +121,7 @@ def gets_recipes_from_spoonacular():
     
     else: # if the search gives no results
 
-        import pdb; pdb.set_trace() 
-
-        return jsonify({'results': [{'error' : 'none'}]})
+        return redirect('/search')
 
 
    
@@ -172,25 +167,12 @@ def add_user_to_g():
     else:
         g.user = None
 
-def do_login(user):
-    """Log in user."""
-
-    session[CURR_USER_KEY] = user.id
-
-def do_logout():
-    """Logout user."""
-
-    if CURR_USER_KEY in session:
-        del session[CURR_USER_KEY]
-
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     """Handle user signup.
-    Create new user and add to DB. Redirect to home page.
-    If form not valid, present form.
+    Create new user and add to DB. 
     If the there already is a user with that username: flash message
-    and re-present form.
     """
 
     form = UserAddForm()
@@ -215,7 +197,7 @@ def signup():
         return redirect("/")
 
     else:
-        return render_template('signup.html', form=form)
+        return render_template('user_templates/signup.html', form=form)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -225,8 +207,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.authenticate(form.username.data,
-                                 form.password.data)
+        user = User.authenticate(form.username.data, form.password.data)
 
         if user:
             do_login(user)
@@ -234,7 +215,6 @@ def login():
             return redirect("/")
 
         flash("Invalid credentials.", 'danger')
-
 
     return render_template('user_templates/login.html', form=form)
 
@@ -297,7 +277,9 @@ def delete_user(user_id):
         db.session.delete(g.user)
         db.session.commit()
 
+    flash(f"Profile Deleted", "danger")
     return redirect("/signup")
+     
 
 
 ######################################################################
@@ -308,8 +290,8 @@ def favorite_recipe(recipe_id):
     """Add or remove favorite recipe"""  
 
     if not g.user:
-        flash("Login/Signup To See Recipes.", "danger")
-        return redirect("/login")
+        flash("Login/Signup To Save Recipes.", "danger")
+        return redirect(f"/recipe/{recipe_id}")
 
     user = User.query.get_or_404(g.user.id)
     recipe = Recipe.query.get_or_404(recipe_id)
@@ -332,7 +314,7 @@ def favorite_recipe(recipe_id):
         return redirect(f"/recipe/{recipe.id}")
 
     else:
-        g.user.recipes.append(Favorite(user_id=user.id, recipe_id=recipe_id, is_favorite=True)) 
+        g.user.recipes.append(Favorite(user_id=user.id, recipe_id=recipe_id)) 
         db.session.commit()
 
         flash(f"Added {recipe.title} to favorites", "success")
