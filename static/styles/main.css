@@ -1,0 +1,79 @@
+:root {
+    --blue: #1e90ff;
+    --lightgreen: rgb(114, 211, 190);
+    --white: #ffffff;
+    --darkgrey: rgb(48, 48, 48);
+    --lightgrey: rgb(155, 155, 155);
+  }
+
+
+/* Remove the navbar's default margin-bottom and rounded borders */ 
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+    padding-left: 5px;
+    padding-right: 10px;
+    background-color: var(--lightgreen);
+    color: var(--white);
+}
+a.navbar-brand {
+    color: var(--white);
+}
+.navbar-nav li {
+    color: var(--white);
+}
+.navbar-nav li a {
+    color: var(--white);
+}
+
+
+
+i.search-icon {
+    font-size: 80px;
+    color: var(--lightgreen);
+    size: 50px;
+}
+
+
+h1 {
+    font-family: 'Arvo', serif;
+}
+
+
+body {
+    background-color: var(--lightgreen);
+}
+div.container {
+    background: white;
+    width: 100%;
+}
+
+
+footer {
+    padding-top: 50px;
+    text-align: center;
+    background-color: var(--lightgreen);
+    height: 150px;
+    width: 100%;
+    border-top: .5px solid black;
+  }
+
+footer p {
+    width: 100%;
+    color: white;
+    font-size: 30px;
+    font-family: 'Arvo', serif;
+}
+
+
+
+@media only screen and (min-width: 600px) {
+
+    .navbar {
+        font-size: 20px;
+    }
+    .navbar-brand {
+        font-size: 20px;
+    }
+    
+}

@@ -1,46 +1,18 @@
+
+
+/*_______ Cuisine Page styles______*/
+
 :root {
     --blue: #1e90ff;
     --green: rgb(41, 185, 154);
     --lightgreen: rgb(114, 211, 190);
+    --lightergreen: rgb(200 229 223);
     --white: #ffffff;
     --darkgrey: rgb(48, 48, 48);
     --lightgrey: rgb(155, 155, 155);
-  }
-
-
-/* Remove the navbar's default margin-bottom and rounded borders */ 
-.navbar {
-    margin-bottom: 0;
-    border-radius: 0;
-    padding-left: 5px;
-    background-color: var(--green);
-    color: white;
-}
-a.navbar-brand {
-    color: white;
-}
-.navbar {
-    padding-right: 100px;
-}
-.navbar-nav li {
-    color: white;
-}
-.navbar-nav li a {
-    color: var(--white);
-}
- .navbar-nav a:hover {
-  color: var(--darkgrey);
-}
-a.nav-link.active {
-    color: var(--darkgrey)
-}
-a.nav-link.active:hover {
-    color: var(--white)
 }
 
-/*----------------------------------*/
-/*_______ Cuisine Page styles______*/
-/*--------------------------------*/
+
 h1 {
     color: var(--green)
 }
@@ -80,22 +52,4 @@ h1 em {
     padding-inline: 15px;
     margin-right: 5px;
     transition: color .8s, background-color 0.8s, padding-inline 0.8s, margin 0.8s, opacity 0.8s;
-}
-
-
-i.search-icon {
-    font-size: 80px;
-    color: var(--green);
-    size: 50px;
-}
-
-/*------------------------------------------*/
-/*___________ Recipe Page Styles __________*/
-/*----------------------------------------*/
-
-
-
-.fav_true {
-    background: rgb(187, 90, 90);
-    color: black;
 }

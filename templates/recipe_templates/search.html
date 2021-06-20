@@ -1,45 +1,72 @@
 {% extends "base.html" %}
 {% block title %}Search{% endblock %}
 
+{% block styles %}
+  <link rel="stylesheet" href="../static/styles/slider.css">
+  <link rel="stylesheet" href="../static/styles/search.css">
+{% endblock %}
+
 {% block body %}
 
+<div class="container" id="search_body">
 
-<div class="container">
-  
-  <h1>Search For Recipes</h1>
+  <h1>Search Recipes</h1>
+
+  <div class="row">
+
+    <div id="query_container">
+      <div class="col col-sm-6" id="query_box">
+
+        <div class="cont">
+          <h2>Key Word</h2>
+          <i class="fa fa-search search-icon"></i>
+        </div>
+       
+        <div class="cont">
+          <form>
+            <input id="search-query" value="quinoa"></br>      
+
+            <input type="checkbox" id="gluten_free">
+            <label for="gluten_free">Gluten Free</label><br>
+
+            <label for="protein_scale"></label><p>Protein per Serving (g): </p><span id="protein_amt"></span>
+            <input type="range" id="protein_scale" name="protein_scale" min=5 max=20 value=8></br>
+
+            <button id="search">Search</button>
+          </form>
+          <div id="search-results"></div>
+        </div>
+       
+
+      </div>
+    </div>
+    
+    <div class="col col-sm-6">
+      
+      <div class="cont slideanim" id="cuisine_container">
+          <a href="/cuisine">
+            <h2>Cuisines</h2>
+            <i class="fa fa-globe search-icon"></i>
+          </a>        
+      </div>
+
+      <div class="cont slideanim_right" id="popular_container">
+          <a href="/popular">
+            <h2>Popular</h2>
+            <i class="fa fa-star search-icon"></i>
+          </a>
+ 
+      </div>
+
+    </div>
 
 
-  <div class="container">
-    <h2>Cuisines</h2>
-    <button><a href="/cuisine">Search Cuisines</a></button>
-    <i class="fa fa-globe search-icon"></i>
+
   </div>
-
-  <div class="container">
-    <h2>Popular</h2>
-    <button><a href="/popular">Most Popular</a></button>
-    <i class="fa fa-star search-icon"></i>
-  </div>
-
-  <div class="container">
-    <h2>Key Word</h2>
-    <form>
-        <input id="search-query" value="quinoa"></br>
-
-        <input type="checkbox" id="gluten_free">
-        <label for="gluten_free">Gluten Free</label><br>
-
-        <label for="protein_scale"></label><p>Protein per Serving: <span id="demo"></span></p>
-        <input type="range" id="protein_scale" name="protein_scale" min=5 max=20></br>
-
-        <button id="search">Search</button>
-    </form>
-    <div id="search-results"></div>
-    <i class="fa fa-search search-icon"></i>
-  </div>
-  
+    
 
 </div>
+
 
 
 {% endblock %}
