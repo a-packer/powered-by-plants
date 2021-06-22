@@ -16,10 +16,11 @@ function showRecipes(evt) {
                 time = recipe.readyInMinutes
                 servings = recipe.servings
     
-                newRecipe = document.createElement("div")
+                newRecipe = document.createElement("article")
                 link = document.createElement("button")
+                link.classList.add("btn")
                 link.innerHTML = `<a href="http://127.0.0.1:5000/recipe/${recipe.id}">See Recipe</a>`
-                title_header = document.createElement("h3")
+                title_header = document.createElement("h4")
                 link.append(title_header)
                 link.href = `/recipe/${id}`
                 title_header.innerText = title
