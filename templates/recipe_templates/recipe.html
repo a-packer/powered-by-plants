@@ -7,38 +7,42 @@
 <link rel="stylesheet" href="../static/styles/recipe.css">
 {% endblock %}
 
+<section>
+    <h1>{{recipe.title}}</h1>
+    <div id="fav_div">
+        <form method="POST" action="/user/favorite/{{ recipe.id }}" id="fav_form">
+            <button class="btn btn-outline-primary btn-sm" id="favorite_button">
+                {% if user_favorite %}
+                    Remove Favorite
+                {% else %}
+                    Add favorite
+                {% endif %}
+            </button>
+        </form>
+    </div>
+    
+    <img src="{{ recipe.img }}" alt="{{ recipe.title }} picture" width="500">
+    <h4>Ready in {{recipe.time}} minutes</h4>
+    <h5>Serves {{recipe.servings}}</h5>
 
-<h1>{{recipe.title}}</h1>
-<form method="POST" action="/user/favorite/{{ recipe.id }}" id="fav_form">
-    <button class="btn btn-outline-primary btn-sm" id="favorite_button">
-        {% if user_favorite %}
-            Remove Favorite
-        {% else %}
-            Add favorite
-        {% endif %}
-    </button>
-  </form>
-<img src="https://images.pexels.com/photos/1095550/pexels-photo-1095550.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="yum yum food description" width="500">
-<h4>Ready in {{recipe.time}} minutes</h4>
-<h4>Serves {{recipe.servings}}</h4>
+    <ul id="ingredients">
+        {% for ing in ingredients %}
+            {% if ing[1] != 'servings' %}
+                <li>{{ing[0]}} {{ing[1]}} {{ing[2]}}</li>
+            {% endif %}
+        {% endfor %}
+        <h4>Optional</h4>
+        {% for ing_opt in optional_ing %}
+            <li>{{ing_opt[2]}}</li>
+        {% endfor %}
+    </ul>
 
-<ul>
-    {% for ing in ingredients %}
-        {% if ing[1] != 'servings' %}
-            <li>{{ing[0]}} {{ing[1]}} {{ing[2]}}</li>
-        {% endif %}
-    {% endfor %}
-    <h4>Optional</h4>
-    {% for ing_opt in optional_ing %}
-        <li>{{ing_opt[2]}}</li>
-    {% endfor %}
-</ul>
-
-<h2>Instructions</h2>
-<ol>
-    {% for step in instructions %}
-    <li>{{step.step}}</li>
-    {% endfor %}
-</ol>
+    <h2>Instructions</h2>
+    <ol>
+        {% for step in instructions %}
+        <li>{{step.step}}</li>
+        {% endfor %}
+    </ol>
+</section>
 
 {% endblock %}

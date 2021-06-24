@@ -1,10 +1,10 @@
 :root {
-  --blue: #1e90ff;
   --green: rgb(41, 185, 154);
   --lightgreen: rgb(114, 211, 190);
   --lightergreen: rgb(200 229 223);
   --white: #ffffff;
   --darkgrey: rgb(48, 48, 48);
+  --mediumgrey: rgb(87, 87, 87);
   --lightgrey: rgb(155, 155, 155);
 }
 

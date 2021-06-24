@@ -1,0 +1,91 @@
+:root {
+    --green: rgb(41, 185, 154);
+    --lightgreen: rgb(114, 211, 190);
+    --lightergreen: rgb(200 229 223);
+    --white: #ffffff;
+    --darkgrey: rgb(48, 48, 48);
+    --mediumgrey: rgb(87, 87, 87);
+    --lightgrey: rgb(155, 155, 155);
+  }
+
+section {
+    background-color: var(--white);
+    padding: 0px;
+    margin: 0px;
+}
+header {
+    padding-top: 20px;
+}
+
+h1, h3 {
+    margin: 0px;
+}
+h1 {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 25px;
+}
+
+
+
+h4 {
+    width: 100%;
+    color: var(--green);
+    font-size: 20px;
+    margin: 0px;
+    text-align: center;
+}
+article {
+    height: 100%;
+    width: 100%;
+    padding-bottom: 10px 0px 10px 0px;
+}
+article button.btn {
+    font-size: 12px;
+    margin-bottom: 25px;
+    margin-left: 25%;
+    width: 50%;    
+}
+article p {
+    font-size: 12px;
+    margin-top: 0px;
+    text-align: center;
+    width: 100%;
+}
+
+#delete {
+   display: flex;
+   justify-content: center; 
+   padding-bottom: 25px;
+}
+
+@media only screen and (min-width: 426px) {
+    
+
+    h4 {
+        width: 100%;
+        color: var(--green);
+    }  
+    article {
+        padding: 15px;
+    }
+    article button {
+        margin: 10px;
+        font-size: 25px;
+        padding: 10px;
+    }
+    article p {
+        font-size: 20px;
+        margin-top: 5px;
+        margin-bottom: 0px;
+        text-align: center;
+    }
+ 
+}
+
+@media only screen and (min-width: 600px) {
+    body {
+        max-width: 1000px;
+        margin: auto;
+    }
+}

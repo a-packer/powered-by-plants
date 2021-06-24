@@ -1,14 +1,30 @@
 {% extends "base.html" %}
 
+
+{% block styles %}
+  <link rel="stylesheet" href="../static/styles/cuisine_popular.css">
+{% endblock %}
+
+
 {% block body %}
 
+<section>
+
   <div class="container">
-      <h1 class="display-1"><em>Vegan Recipes: </em>Popular</h1> 
+      <h1 class="display-1"><em>Vegan Recipes </em>Popular</h1> 
   </div>   
 
-  {% for recipe in top_recipes %}
-  <h3><a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a></h3>
-  <img src="{{ recipe.img }}">
-  {% endfor %}
+
+  <div id="popular_recipes">
+    {% for recipe in top_recipes %}
+    <div>
+      <h3><a href="/recipe/{{ recipe.id }}">{{ recipe.title }}</a></h3>
+      <img src="{{ recipe.img }}" class="results">
+    </div>
+    {% endfor %}
+  </div>
+
+</section>
+
 
 {% endblock %}

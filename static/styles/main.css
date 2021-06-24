@@ -1,8 +1,8 @@
 :root {
-    --blue: #1e90ff;
     --lightgreen: rgb(114, 211, 190);
     --white: #ffffff;
     --darkgrey: rgb(48, 48, 48);
+    --mediumgrey: rgb(87, 87, 87);
     --lightgrey: rgb(155, 155, 155);
   }
 
@@ -11,9 +11,10 @@
 .navbar {
     margin-bottom: 0;
     border-radius: 0;
+    border: none;
     padding-left: 5px;
     padding-right: 10px;
-    background-color: var(--lightgreen);
+    background-color: var(--mediumgrey);
     color: var(--white);
 }
 a.navbar-brand {
@@ -70,10 +71,19 @@ footer p {
 @media only screen and (min-width: 600px) {
 
     .navbar {
-        font-size: 20px;
+        font-size: 25px;
     }
     .navbar-brand {
-        font-size: 20px;
+        font-size: 25px;
+    }
+    article h4 {
+        font-size: 30px;
+    }
+    button a {
+        font-size: 25px;
+    }
+    .btn {
+        font-size: 25px;
     }
     
 }

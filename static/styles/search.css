@@ -1,10 +1,10 @@
 :root {
-    --blue: #1e90ff;
     --green: rgb(41, 185, 154);
     --lightgreen: rgb(114, 211, 190);
     --lightergreen: rgb(200 229 223);
     --white: #ffffff;
     --darkgrey: rgb(48, 48, 48);
+    --mediumgrey: rgb(87, 87, 87);
     --lightgrey: rgb(155, 155, 155);
   }
 
@@ -176,8 +176,6 @@ span#protein_amt {
 
 
 
-
-
 @media only screen and (min-width: 426px) {
 
     h1 {
@@ -202,8 +200,6 @@ span#protein_amt {
     }
     
     article {
-        height: 100%;
-        width: 100%;
         padding-bottom: 30px;
     }
     article button {
@@ -226,6 +222,15 @@ span#protein_amt {
 
     #search_body {
         padding-inline: 10%;
+    }
+    
+    body {
+        max-width: 1000px;
+        margin: auto;
+    }
+
+    h1 {
+        font-size: 90px;
     }
     
 }

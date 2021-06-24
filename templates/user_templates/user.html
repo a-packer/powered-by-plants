@@ -1,18 +1,37 @@
 {% extends 'base.html' %}
 
+{% block styles %}
+  <link rel="stylesheet" href="../static/styles/user.css">
+{% endblock %}
+
 {% block body %}
-<h1>{{ user.first_name }}'s Favorites</h1>
-<form action="/user/delete/{{user.id}}" method="GET">
-    <button>Delete Account</button>
-</form>
+
+<section>
+    <header>
+        <h1>{{ user.first_name }}'s Favorites</h1>
+    </header>
+    
 
 
-<div id="favorites">
-    {% for recipe in fav_recipes %}
-    <div>
-        <h3><a href='/recipe/{{recipe.id}}'>{{ recipe.title }}</a></h3>
+    <div id="favorites">
+        {% for recipe in fav_recipes %}
+        <article>
+            <h4><a href='/recipe/{{recipe.id}}'>{{ recipe.title }}</a></h4>
+            <p>Protein: {{ recipe.protein }} //  Prep Time: {{ recipe.time }}  //  Serves: {{ recipe.servings }}</p>
+            <button class="btn"><a href="http://127.0.0.1:5000/recipe/{{ recipe.id }}">See Recipe</a></button>
+        </article>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
+
+    <div id="delete">
+        <form action="/user/delete/{{user.id}}" method="GET">
+            <button class="btn btn-danger">Delete Account</button>
+        </form>
+    </div>
+
+   
+</section>
+
+
 
 {% endblock %}

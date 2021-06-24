@@ -1,25 +1,23 @@
 
 
-/*_______ Cuisine Page styles______*/
-
 :root {
-    --blue: #1e90ff;
     --green: rgb(41, 185, 154);
     --lightgreen: rgb(114, 211, 190);
     --lightergreen: rgb(200 229 223);
     --white: #ffffff;
     --darkgrey: rgb(48, 48, 48);
+    --mediumgrey: rgb(87, 87, 87);
     --lightgrey: rgb(155, 155, 155);
 }
 
 
 h1 {
-    color: var(--green)
+    color: var(--green);
+    text-align: center;
 }
 h1 em {
-    color: var(--lightgrey)
+    color: var(--lightgrey);
 }
-
 
 .img-responsive {
     width:100%; 
@@ -52,4 +50,42 @@ h1 em {
     padding-inline: 15px;
     margin-right: 5px;
     transition: color .8s, background-color 0.8s, padding-inline 0.8s, margin 0.8s, opacity 0.8s;
+}
+
+/* recipe results styles */
+section {
+    background-color: var(--white);
+    width: 100%;
+    padding-left: 10%;
+    padding-right: 10%;
+}
+#cuisine_recipes div, #popular_recipes div {
+    max-width: 600px;
+    margin: auto;
+    padding-bottom: 30px;
+}
+
+img.results {
+    width: 100%;
+}
+h3 a {
+    color: var(--green);
+}
+
+@media only screen and (min-width: 600px) {
+    body {
+        max-width: 1000px;
+        margin: auto;
+    }
+    .img-div {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 60px;
+    }
+    h3 {
+        font-size: 40px;
+    }
 }
