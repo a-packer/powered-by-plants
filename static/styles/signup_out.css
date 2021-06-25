@@ -1,0 +1,75 @@
+:root {
+    --green: rgb(41, 185, 154);
+    --lightgreen: rgb(114, 211, 190);
+    --lightergreen: rgb(200 229 223);
+    --white: #ffffff;
+    --darkgrey: rgb(48, 48, 48);
+    --mediumgrey: rgb(87, 87, 87);
+    --lightgrey: rgb(155, 155, 155);
+}
+
+.row {
+    margin: 0px;
+}
+
+section {
+    background-color: var(--white);
+    width: 100%;
+}
+
+section div {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+section div div {
+    width: 100%;
+}
+
+h2 {
+    padding-top: 50px;
+    color: var(--lightgreen);
+    text-align: center;
+}
+
+div#need-signup {
+    padding: 0px;
+}
+h3 {
+    color: var(--darkgrey);
+    text-align: center;
+    width: 100%;
+    font-size: 20px;
+}
+
+input {
+    margin-top: 5px;
+}
+
+button.btn {
+    margin-top: 10px;
+    margin-bottom: 50px;
+    background-color: var(--lightergreen);
+}
+
+
+@media only screen and (min-width: 600px) {
+
+    section div {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    h2 {
+        font-size: 80px;
+    }
+    h3 {
+        font-size: 35px;
+    }
+
+    .form-control {
+        font-size: 30px;
+        padding: 18px;
+    }
+
+}

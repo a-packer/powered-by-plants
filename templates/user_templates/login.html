@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
 
+{% block styles %}
+  <link rel="stylesheet" href="../static/styles/signup_out.css">
+{% endblock %}
+
 {% block body %}
+
+<section>
 
   <div class="row justify-content-md-center">
     <div class="col-md-7 col-lg-5">
-      <h2>Welcome back.</h2>
-      <div>
-        <h3>Need to Sign Up?</h3>
-        <a href='/signup'><button>Sign Up</button></a>
+      <h2>Welcome back</h2>
+      <div id="need-signup">
+        <a href='/signup'><h3>Sign Up Here</h3></a>
       </div>
 
       <form method="POST" id="user_form">
@@ -20,9 +25,13 @@
           {{ field(placeholder=field.label.text, class="form-control") }}
         {% endfor %}
 
-        <button class="btn btn-primary btn-block btn-lg">Log in</button>
+        <button class="btn btn-block btn-light">Log in</button>
       </form>
     </div>
   </div>
+
+</section>
+
+
 
 {% endblock %}

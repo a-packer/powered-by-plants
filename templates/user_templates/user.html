@@ -16,9 +16,9 @@
     <div id="favorites">
         {% for recipe in fav_recipes %}
         <article>
-            <h4><a href='/recipe/{{recipe.id}}'>{{ recipe.title }}</a></h4>
+            <h4>{{ recipe.title }}</h4>
             <p>Protein: {{ recipe.protein }} //  Prep Time: {{ recipe.time }}  //  Serves: {{ recipe.servings }}</p>
-            <button class="btn"><a href="http://127.0.0.1:5000/recipe/{{ recipe.id }}">See Recipe</a></button>
+            <button class="btn"><a href='/recipe/{{recipe.id}}'>See Recipe</a></button>
         </article>
         {% endfor %}
     </div>

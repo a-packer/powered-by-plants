@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block styles %}
-  <link rel="stylesheet" href="../static/styles/cuisine.css">
+  <link rel="stylesheet" href="../static/styles/cuisine_popular.css">
 {% endblock %}
 
 
@@ -65,7 +65,7 @@
   </div><br>
 
   <form id="cuisine_form">
-    <label for="other_cuisine">Search Other Cuisine:</label><br>
+    <label for="other_cuisine">Search Other Cuisine</label><br>
     <select name="cuisine" id="other_cuisine">
       <option value="African">African</option>
       <option value="American">American</option>
@@ -78,7 +78,7 @@
       <option value="French">French</option>
       <option value="German">German</option>
       <option value="Greek">Greek</option>
-      <option value="Indian">Indain</option>
+      <option value="Indian">Indian</option>
       <option value="Irish">Irish</option>
       <option value="Italian">Italian</option>
       <option value="Japanese">Japanese</option>
@@ -87,14 +87,14 @@
       <option value="Latin American">Latin American</option>
       <option value="Mediterranean">Mediterranean</option>
       <option value="Mexican">Mexican</option>
-      <option value="Middle Eastern">Middle Easter</option>
+      <option value="Middle Eastern">Middle Eastern</option>
       <option value="Nordic">Nordic</option>
       <option value="Southern">Southern</option>
       <option value="Spanish">Spanish</option>
       <option value="Thai">Thai</option>
       <option value="Vietnamese">Vietnamese</option>
     </select>
-    <button type="submit">Submit</button>
+    <button type="submit" class="btn btn-light">Submit</button>
   </form>
 
 

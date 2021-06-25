@@ -19,6 +19,11 @@ h1 em {
     color: var(--lightgrey);
 }
 
+button#back {
+    color: var(--darkgrey);
+    background-color: var(--lightergreen);
+}
+
 .img-responsive {
     width:100%; 
     height: 300px; 
@@ -51,6 +56,28 @@ h1 em {
     margin-right: 5px;
     transition: color .8s, background-color 0.8s, padding-inline 0.8s, margin 0.8s, opacity 0.8s;
 }
+
+form {
+    margin: 0px;
+    background-color: var(--white);
+    padding: 15px;
+    border-top: 0.5px solid black;
+}
+form label {
+    font-size: 24px;
+    color: var(--mediumgrey);
+}
+form select {
+    background-color: var(--lightgreen);
+    color: white;
+    font-size: 24px;
+    padding: 5px;
+}
+#cuisine_form button{
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
 
 /* recipe results styles */
 section {

@@ -53,7 +53,7 @@ def cuisine_search():
 def cuisine_search_results(cuisine):
     """Gets recipes for a specified cuisine"""
 
-    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&minProtein=5&number=5&diet=vegan&addRecipeInformation=True&cuisine={cuisine}") 
+    res = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&minProtein=5&number=8&diet=vegan&addRecipeInformation=True&cuisine={cuisine}") 
     response_string = res.text
     response_dict = json.loads(response_string) #convert to json dict
 

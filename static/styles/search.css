@@ -7,11 +7,6 @@
     --mediumgrey: rgb(87, 87, 87);
     --lightgrey: rgb(155, 155, 155);
   }
-
-a {
-    color: var(--darkgrey);
-}
-
  
 .slideanim, .slideanim_right {visibility: hidden;}
 .slide {
@@ -129,6 +124,16 @@ article p {
     width: 100%;
 }
 
+div.hover-fade:hover {
+    opacity: 0.8;
+}
+a {
+    color: var(--darkgrey);
+}
+div.hover-fade a:hover {
+    color: var(--green);
+}
+
 .cont {
     display: flex;
     justify-content: center;
@@ -159,6 +164,16 @@ button#search {
     border-radius: 5%;
     margin-left: 25%;
     margin-bottom: 25px;
+}
+button#search:hover {
+    background-color: var(--lightgreen);
+    color: white;
+}
+button:hover {
+    background-color: var(--lightergreen);
+}
+a:hover {
+    color: initial;
 }
 p {
     float: left;
@@ -240,6 +255,7 @@ span#protein_amt {
 
     #search_body {
         padding-inline: 15%;
+        padding-top: 50px;
     }
     
 }

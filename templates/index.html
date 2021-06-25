@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 
 
+{% block styles %}
+  <link rel="stylesheet" href="../static/styles/home.css">
+{% endblock %}
+
+
 {% block body %}
 
-<h1>Powered By Plants</h1>
-<h2>A Collection Of Vegan Protien-Rich Recipes</h2>
+<section>
+    <h1>Powered By Plants</h1>
+    <h2>A Collection Of Vegan Protien-Rich Recipes</h2> 
+
+    <a href="/search"><button class="btn btn-light">Recipes</button></a>
+</section>
 
 
 {% endblock %}
