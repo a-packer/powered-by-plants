@@ -19,7 +19,7 @@ function showRecipes(evt) {
                 newRecipe = document.createElement("article")
                 link = document.createElement("button")
                 link.classList.add("btn")
-                link.innerHTML = `<a href="http://127.0.0.1:5000/recipe/${recipe.id}">See Recipe</a>`
+                link.innerHTML = `<a href="/recipe/${recipe.id}">See Recipe</a>`
                 title_header = document.createElement("h4")
                 link.append(title_header)
                 link.href = `/recipe/${id}`
