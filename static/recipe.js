@@ -57,7 +57,7 @@ function showRecipes(evt) {
         params =  {"query": query, intolerances : intolerances, "minProtein" : protein , "number" : 1, "diet" : "vegan"}
 
         // get recipe from spoonacular using the complexSearch endpoint
-        res = await axios.get("http://127.0.0.1:5000/api/get-recipes", {params: params})  
+        res = await axios.get("/api/get-recipes", {params: params})  
 
         results = res.data.results // recipe results JSON   
         show_recipe(results)
