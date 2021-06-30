@@ -1,12 +1,76 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Powered By Plants</title>
+  <script src="https://unpkg.com/jquery"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-{% block body %}
-<h1>Are you sure you want to delete?</h1>
-<form action="/user/delete/{{g.user.id}}" method="POST">
-    <button>Delete Account</button>
-</form>
-<form action="/user/{{g.user.id}}" method="GET">
-    <button>Keep it</button>
-</form>
+  <script src="https://use.fontawesome.com/0c64eecd28.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/fontawesome.min.css" integrity="undefined" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-{% endblock %}
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Arvo&display=swap" rel="stylesheet">
+
+ 
+  <link rel="stylesheet" href="../../static/styles/main.css"> 
+  <link rel="stylesheet" href="../../static/styles/delete.css">
+ 
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-light">
+        <div class="container-fluid">
+    
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>                        
+                </button>
+                <a class="navbar-brand" href="/" style="color: white;">PBP <i class="fa fa-leaf"></i></a>
+            </div>
+        
+            <div class="collapse navbar-collapse" id="myNavbar">
+                
+                <ul class="nav navbar-nav">
+                {% if g.user %}
+                <li><a href="/user/{{g.user.id}}" style="color: white;">Favorites</a></li> 
+                {% endif %}
+                <li><a href="/search" style="color: white;">Search</a></li>
+        
+                </ul>
+        
+                <ul class="nav navbar-nav navbar-right">
+                {% if not g.user %}
+                <li><a href="/signup" style="color: white;"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="/login" style="color: white;"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {% else %}
+                <li><a href="/logout" style="color: white;"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>  
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section>
+        <h1>Are you sure you want to delete?</h1>
+        <form action="/user/delete/{{g.user.id}}" method="POST">
+            <button class="btn btn-danger">Delete Account</button>
+        </form>
+        <form action="/user/{{g.user.id}}" method="GET">
+            <button class="btn btn-info">Keep it</button>
+        </form>
+</section>
+
+</body>
+
+
+
