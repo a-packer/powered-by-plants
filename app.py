@@ -131,11 +131,14 @@ def messages_show(recipe_id):
     """show recipe ingredients, instructions"""
 
     recipe = Recipe.query.get_or_404(recipe_id)
-    ingredients = json.loads(recipe.ingredients)  #convert from json to list
+    ingredients = json.loads(recipe.ingredients)  # convert from json to list
+    for ing in ingredients:
+        ing[0] = round(ing[0], 2) # round the ingredient amount
     optional_ing = [ing for ing in ingredients if ing[1] == 'servings']
-    instructions = json.loads(recipe.instructions) #convert from json to list
+    print(ingredients)
+    instructions = json.loads(recipe.instructions) # convert from json to list
  
-    #determine if recipe is current user's favorite
+    # determine if recipe is current user's favorite
     recipe_favorites = recipe.users
     user_ids = [favorite.user_id for favorite in recipe_favorites]
     user_ids_set = set(user_ids)
