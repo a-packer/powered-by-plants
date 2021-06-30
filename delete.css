@@ -1,0 +1,24 @@
+:root {
+    --lightgreen: rgb(114, 211, 190);
+    --white: #ffffff;
+    --darkgrey: rgb(48, 48, 48);
+    --mediumgrey: rgb(87, 87, 87);
+    --lightgrey: rgb(155, 155, 155);
+}
+
+section {
+    background-color: var(--white);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-bottom: 100px;
+    padding-top: 100px;
+    padding-left: 10%;
+    padding-right: 10%;
+    align-content: center;
+    text-align: center;
+}
+
+button {
+    margin-top: 15px;
+}
